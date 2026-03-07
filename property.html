@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="View detailed information, photography, and specifications for this exceptional Maison property listing." />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Property Details — MAISON" />
+  <meta property="og:description" content="View detailed information, photography, and specifications for this exceptional Maison property listing." />
+  <meta property="og:image" content="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&q=80" />
+  <meta property="og:url" content="https://maisonrealty.com/property.html" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Property Details — MAISON" />
+  <meta name="twitter:description" content="View detailed information, photography, and specifications for this exceptional Maison property listing." />
+  <meta name="twitter:image" content="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1200&q=80" />
+  <link rel="canonical" href="https://maisonrealty.com/property.html" />
+  <title>Property — MAISON</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@200;300;400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cream:#F6F3EE; --warm:#EDE8DF; --charcoal:#1C1C1C; --ink:#2E2B27;
+      --muted:#8A8278; --gold:#B89B6A; --gold-lt:#D4BC94; --white:#FDFCFA;
+    }
+    html { font-size:16px; scroll-behavior:smooth; }
+    body { background:var(--cream); color:var(--ink); font-family:'Jost',sans-serif; font-weight:300; letter-spacing:0.01em; overflow-x:hidden; cursor:none; }
+
+    /* CURSOR */
+    .cursor { position:fixed; top:0; left:0; z-index:9999; pointer-events:none; mix-blend-mode:difference; }
+    .cursor-dot { width:8px; height:8px; border-radius:50%; background:var(--charcoal); transform:translate(-50%,-50%); }
+    .cursor-ring { position:fixed; top:0; left:0; z-index:9998; width:40px; height:40px; border-radius:50%; border:1px solid var(--charcoal); transform:translate(-50%,-50%); pointer-events:none; transition:transform .18s ease,width .25s ease,height .25s ease,opacity .25s ease; opacity:.5; }
+
+    /* NAV */
+    nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:1.2rem 4rem; background:rgba(246,243,238,.95); backdrop-filter:blur(12px); border-bottom:1px solid rgba(184,155,106,.2); }
+    .nav-logo { font-family:'Cormorant Garamond',serif; font-size:1.5rem; font-weight:300; letter-spacing:.22em; text-transform:uppercase; color:var(--ink); text-decoration:none; }
+    .nav-links { display:flex; gap:2.8rem; list-style:none; }
+    .nav-links a { font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color .3s; }
+    .nav-links a:hover, .nav-links a.active { color:var(--gold); }
+    .nav-back { display:flex; align-items:center; gap:.6rem; font-size:.7rem; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color .3s; }
+    .nav-back:hover { color:var(--gold); }
+    .nav-back:hover svg { transform:translateX(-3px); }
+    .nav-back svg { transition:transform .3s; }
+
+    /* REVEAL */
+    .reveal { opacity:0; transform:translateY(28px); transition:opacity .8s cubic-bezier(.22,1,.36,1),transform .8s cubic-bezier(.22,1,.36,1); }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+    .reveal-delay-1 { transition-delay:.1s; }
+    .reveal-delay-2 { transition-delay:.2s; }
+    .reveal-delay-3 { transition-delay:.3s; }
+
+    /* GALLERY */
+    .gallery-hero { margin-top:73px; display:grid; grid-template-columns:3fr 1fr 1fr; grid-template-rows:320px 280px; gap:3px; }
+    .gallery-main { grid-column:1/2; grid-row:1/3; position:relative; overflow:hidden; cursor:none; }
+    .gallery-main img { width:100%; height:100%; object-fit:cover; transition:transform .9s cubic-bezier(.22,1,.36,1); display:block; }
+    .gallery-main:hover img { transform:scale(1.04); }
+    .gallery-thumb { position:relative; overflow:hidden; cursor:none; }
+    .gallery-thumb img { width:100%; height:100%; object-fit:cover; transition:transform .7s cubic-bezier(.22,1,.36,1); display:block; }
+    .gallery-thumb:hover img { transform:scale(1.06); }
+    .gallery-thumb.has-more::after { content:'+' attr(data-more) ' more'; position:absolute; inset:0; background:rgba(28,28,28,.55); display:grid; place-items:center; font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.6rem; font-weight:300; color:var(--white); opacity:0; transition:opacity .3s; }
+    .gallery-thumb.has-more:hover::after { opacity:1; }
+    .gallery-badge { position:absolute; top:1.6rem; left:1.6rem; font-size:.58rem; letter-spacing:.2em; text-transform:uppercase; background:var(--gold); color:var(--charcoal); padding:.4rem 1rem; z-index:2; }
+    .gallery-empty { background:var(--warm); display:grid; place-items:center; }
+    .gallery-empty span { font-size:.6rem; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); }
+
+    /* LIGHTBOX */
+    .lightbox { position:fixed; inset:0; z-index:1000; background:rgba(28,28,28,.97); display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity .4s ease; }
+    .lightbox.open { opacity:1; pointer-events:all; }
+    .lightbox-img { max-width:90vw; max-height:85vh; object-fit:contain; display:block; transition:opacity .18s ease; }
+    .lightbox-close { position:absolute; top:2rem; right:2rem; width:44px; height:44px; border:1px solid rgba(255,255,255,.25); background:transparent; cursor:none; display:grid; place-items:center; font-size:1.2rem; color:rgba(255,255,255,.6); transition:border-color .3s,color .3s; }
+    .lightbox-close:hover { border-color:var(--gold); color:var(--gold); }
+    .lightbox-nav { position:absolute; top:50%; transform:translateY(-50%); width:52px; height:52px; border:1px solid rgba(255,255,255,.2); background:transparent; cursor:none; display:grid; place-items:center; color:rgba(255,255,255,.6); font-size:1.1rem; transition:border-color .3s,color .3s; }
+    .lightbox-nav:hover { border-color:var(--gold); color:var(--gold); }
+    .lightbox-prev { left:2rem; }
+    .lightbox-next { right:2rem; }
+    .lightbox-counter { position:absolute; bottom:2rem; left:50%; transform:translateX(-50%); font-size:.65rem; letter-spacing:.25em; text-transform:uppercase; color:rgba(255,255,255,.4); }
+
+    /* LAYOUT */
+    .page-wrap { max-width:1280px; margin:0 auto; padding:5rem 4rem; display:grid; grid-template-columns:1fr 400px; gap:6rem; align-items:start; }
+
+    /* BREADCRUMB */
+    .breadcrumb { max-width:1280px; margin:0 auto; padding:2rem 4rem 0; display:flex; align-items:center; gap:.7rem; font-size:.65rem; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); flex-wrap:wrap; }
+    .breadcrumb a { color:var(--muted); text-decoration:none; transition:color .3s; }
+    .breadcrumb a:hover { color:var(--gold); }
+    .breadcrumb-sep { color:var(--gold-lt); }
+
+    /* PROPERTY INFO */
+    .prop-eyebrow { font-size:.65rem; letter-spacing:.32em; text-transform:uppercase; color:var(--gold); margin-bottom:1rem; }
+    .prop-title { font-family:'Cormorant Garamond',serif; font-size:clamp(2.8rem,4.5vw,4.8rem); font-weight:300; line-height:.95; letter-spacing:-.01em; color:var(--ink); margin-bottom:.7rem; }
+    .prop-title em { font-style:italic; }
+    .prop-location { display:flex; align-items:center; gap:.5rem; font-size:.78rem; letter-spacing:.06em; color:var(--muted); margin-bottom:2.4rem; }
+    .prop-price { font-family:'Cormorant Garamond',serif; font-size:2.2rem; font-weight:400; color:var(--ink); margin-bottom:.4rem; }
+    .prop-price-note { font-size:.68rem; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); margin-bottom:3rem; }
+
+    /* SPEC STRIP */
+    .spec-strip { display:flex; gap:0; border-top:1px solid var(--warm); border-bottom:1px solid var(--warm); margin-bottom:3.5rem; overflow-x:auto; }
+    .spec-item { flex:1; min-width:80px; padding:1.6rem 1.2rem; text-align:center; position:relative; }
+    .spec-item+.spec-item::before { content:''; position:absolute; left:0; top:20%; bottom:20%; width:1px; background:var(--warm); }
+    .spec-value { font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:400; color:var(--ink); line-height:1; margin-bottom:.3rem; }
+    .spec-label { font-size:.6rem; letter-spacing:.22em; text-transform:uppercase; color:var(--muted); }
+
+    /* DESCRIPTION */
+    .section-label { font-size:.62rem; letter-spacing:.3em; text-transform:uppercase; color:var(--gold); margin-bottom:1.2rem; }
+    .prop-tagline { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:clamp(1.4rem,2.5vw,2rem); font-weight:300; line-height:1.3; color:var(--ink); margin-bottom:1.8rem; max-width:560px; }
+    .prop-desc-body { font-size:.92rem; line-height:1.9; color:var(--muted); max-width:620px; margin-bottom:1.2rem; }
+
+    /* FEATURES */
+    .features-grid { display:grid; grid-template-columns:1fr 1fr; gap:.6rem 3rem; margin-bottom:4rem; }
+    .feature-item { display:flex; align-items:center; gap:.8rem; font-size:.82rem; color:var(--ink); padding:.5rem 0; border-bottom:1px solid rgba(237,232,223,.7); }
+    .feature-item::before { content:''; width:16px; height:1px; background:var(--gold); flex-shrink:0; }
+
+    /* FLOOR PLAN */
+    .floorplan-strip { background:var(--warm); padding:3rem; display:flex; align-items:center; gap:3rem; margin-bottom:4rem; cursor:none; transition:background .3s; }
+    .floorplan-strip:hover { background:var(--charcoal); }
+    .floorplan-icon { width:52px; height:52px; flex-shrink:0; border:1px solid var(--gold); display:grid; place-items:center; }
+    .floorplan-text h4 { font-family:'Cormorant Garamond',serif; font-size:1.2rem; font-weight:400; color:var(--ink); margin-bottom:.3rem; transition:color .3s; }
+    .floorplan-strip:hover .floorplan-text h4 { color:var(--white); }
+    .floorplan-text p { font-size:.75rem; letter-spacing:.06em; color:var(--muted); transition:color .3s; }
+    .floorplan-strip:hover .floorplan-text p { color:rgba(255,255,255,.45); }
+    .floorplan-arrow { margin-left:auto; font-size:1.2rem; color:var(--gold); transition:transform .3s; }
+    .floorplan-strip:hover .floorplan-arrow { transform:translateX(4px); }
+
+    /* MAP */
+    .map-section { margin-bottom:4rem; }
+    .map-placeholder { width:100%; height:280px; background:var(--warm); position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center; }
+    .map-placeholder::before { content:''; position:absolute; inset:0; background:url('https://images.unsplash.com/photo-1569336415962-a4bd9f69c837?w=1200&q=60') center/cover; filter:grayscale(1) brightness(.6) sepia(.3); }
+    .map-label { position:relative; z-index:1; font-size:.65rem; letter-spacing:.28em; text-transform:uppercase; color:rgba(255,255,255,.5); }
+    .map-pin { position:absolute; top:50%; left:52%; transform:translate(-50%,-50%); z-index:2; }
+    .map-pin-dot { width:12px; height:12px; border-radius:50%; background:var(--gold); box-shadow:0 0 0 6px rgba(184,155,106,.3),0 0 0 12px rgba(184,155,106,.12); }
+
+    /* SIMILAR */
+    .similar-section { padding:7rem 4rem; background:var(--white); }
+    .similar-inner { max-width:1280px; margin:0 auto; }
+    .similar-header { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:3.5rem; }
+    .similar-link { font-size:.7rem; letter-spacing:.2em; text-transform:uppercase; color:var(--gold); text-decoration:none; border-bottom:1px solid var(--gold); padding-bottom:.2rem; transition:color .3s; }
+    .similar-link:hover { color:var(--ink); border-color:var(--ink); }
+    .similar-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:2px; }
+    .sim-card { position:relative; overflow:hidden; cursor:none; }
+    .sim-card-img { width:100%; height:280px; object-fit:cover; display:block; transition:transform .7s cubic-bezier(.22,1,.36,1),filter .5s ease; }
+    .sim-card:hover .sim-card-img { transform:scale(1.06); filter:brightness(.85); }
+    .sim-overlay { position:absolute; inset:0; background:linear-gradient(to top,rgba(28,28,28,.75) 0%,transparent 50%); opacity:0; transition:opacity .4s; }
+    .sim-card:hover .sim-overlay { opacity:1; }
+    .sim-info { position:absolute; bottom:0; left:0; right:0; padding:1.4rem 1.6rem; transform:translateY(8px); opacity:0; transition:transform .4s cubic-bezier(.22,1,.36,1),opacity .4s; }
+    .sim-card:hover .sim-info { transform:translateY(0); opacity:1; }
+    .sim-tag { font-size:.58rem; letter-spacing:.22em; text-transform:uppercase; color:var(--gold-lt); margin-bottom:.3rem; }
+    .sim-name { font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-weight:400; color:var(--white); line-height:1.1; margin-bottom:.25rem; }
+    .sim-price { font-size:.7rem; letter-spacing:.06em; color:rgba(255,255,255,.65); }
+
+    /* FOOTER */
+    footer { background:var(--charcoal); border-top:1px solid rgba(184,155,106,.18); padding:5rem 4rem 3rem; }
+    .footer-top { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:4rem; max-width:1280px; margin:0 auto 4rem; }
+    .footer-brand-name { font-family:'Cormorant Garamond',serif; font-weight:300; font-size:2rem; letter-spacing:.2em; text-transform:uppercase; color:var(--white); margin-bottom:1.2rem; text-decoration:none; display:inline-block; }
+    .footer-tagline { font-size:.8rem; line-height:1.8; color:rgba(255,255,255,.4); max-width:280px; margin-bottom:2rem; }
+    .footer-social { display:flex; gap:.8rem; flex-wrap:wrap; }
+    .social-link { width:38px; height:38px; border:1px solid rgba(255,255,255,.15); display:grid; place-items:center; color:rgba(255,255,255,.4); text-decoration:none; transition:border-color .3s,color .3s; cursor:none; }
+    .social-link:hover { border-color:var(--gold); color:var(--gold); }
+    .footer-col-title { font-size:.62rem; letter-spacing:.25em; text-transform:uppercase; color:var(--gold); margin-bottom:1.5rem; }
+    .footer-links { list-style:none; }
+    .footer-links li { margin-bottom:.75rem; }
+    .footer-links a { font-size:.82rem; color:rgba(255,255,255,.4); text-decoration:none; transition:color .3s; cursor:none; }
+    .footer-links a:hover { color:rgba(255,255,255,.85); }
+    .footer-bottom { max-width:1280px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(255,255,255,.06); padding-top:2rem; flex-wrap:wrap; gap:1rem; }
+    .footer-bottom-links { display:flex; gap:2rem; }
+    .footer-bottom-link { font-size:.68rem; letter-spacing:.1em; color:rgba(255,255,255,.3); text-decoration:none; transition:color .3s; cursor:none; }
+    .footer-bottom-link:hover { color:rgba(255,255,255,.7); }
+    .footer-copy { font-size:.68rem; letter-spacing:.1em; color:rgba(255,255,255,.25); }
+
+    /* SIDEBAR */
+    .sidebar { position:sticky; top:100px; align-self:start; }
+    .enquiry-card { background:var(--white); border:1px solid var(--warm); padding:2.8rem; }
+    .enquiry-heading { font-family:'Cormorant Garamond',serif; font-size:1.5rem; font-weight:400; color:var(--ink); margin-bottom:.4rem; }
+    .enquiry-sub { font-size:.75rem; letter-spacing:.08em; color:var(--muted); margin-bottom:2.2rem; }
+    .form-group { margin-bottom:1.2rem; }
+    .form-label { display:block; font-size:.62rem; letter-spacing:.22em; text-transform:uppercase; color:var(--muted); margin-bottom:.5rem; }
+    .form-input,.form-select,.form-textarea { width:100%; background:var(--cream); border:1px solid transparent; border-bottom:1px solid var(--warm); padding:.85rem 1rem; font-family:'Jost',sans-serif; font-weight:300; font-size:.9rem; color:var(--ink); letter-spacing:.02em; outline:none; appearance:none; transition:border-color .3s,background .3s; }
+    .form-input:focus,.form-select:focus,.form-textarea:focus { border-color:var(--gold); background:var(--white); }
+    .form-textarea { resize:vertical; min-height:90px; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:.8rem; }
+    .btn-enquire { width:100%; padding:1.1rem; background:var(--charcoal); color:var(--white); border:none; cursor:none; font-family:'Jost',sans-serif; font-weight:300; font-size:.72rem; letter-spacing:.22em; text-transform:uppercase; transition:background .3s,transform .2s; margin-top:.4rem; }
+    .btn-enquire:hover { background:var(--gold); color:var(--charcoal); transform:translateY(-1px); }
+    .enquiry-divider { display:flex; align-items:center; gap:1rem; margin:1.6rem 0; color:var(--muted); font-size:.7rem; letter-spacing:.1em; }
+    .enquiry-divider::before,.enquiry-divider::after { content:''; flex:1; height:1px; background:var(--warm); }
+    .btn-call { width:100%; padding:1rem; background:transparent; color:var(--ink); border:1px solid var(--warm); cursor:none; font-family:'Jost',sans-serif; font-weight:300; font-size:.72rem; letter-spacing:.18em; text-transform:uppercase; transition:border-color .3s,color .3s; display:flex; align-items:center; justify-content:center; gap:.7rem; }
+    .btn-call:hover { border-color:var(--gold); color:var(--gold); }
+    .advisor-strip { margin-top:2rem; padding-top:2rem; border-top:1px solid var(--warm); display:flex; gap:1.1rem; align-items:center; }
+    .advisor-avatar { width:48px; height:48px; border-radius:50%; flex-shrink:0; background:url('https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200&q=80') center/cover; border:2px solid var(--warm); }
+    .advisor-name { font-family:'Cormorant Garamond',serif; font-size:1rem; font-weight:500; color:var(--ink); margin-bottom:.15rem; }
+    .advisor-role { font-size:.62rem; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+    .form-success { display:none; text-align:center; padding:1.5rem 0; }
+    .form-success svg { margin-bottom:1rem; }
+    .form-success h4 { font-family:'Cormorant Garamond',serif; font-size:1.4rem; color:var(--ink); margin-bottom:.5rem; }
+    .form-success p { font-size:.82rem; color:var(--muted); line-height:1.7; }
+
+    /* RESPONSIVE */
+    @media(max-width:1100px) { .page-wrap { grid-template-columns:1fr; gap:4rem; } .sidebar { position:static; } .gallery-hero { grid-template-columns:1fr 1fr; grid-template-rows:300px 220px; } .gallery-main { grid-column:1/3; grid-row:1/2; } }
+    @media(max-width:768px) { nav { padding:1.2rem 1.5rem; } .nav-links { display:none; } .page-wrap { padding:3rem 1.5rem; } .breadcrumb { padding:1.5rem 1.5rem 0; } .gallery-hero { grid-template-rows:240px 180px; } .features-grid { grid-template-columns:1fr; } .similar-section { padding:4rem 1.5rem; } .similar-grid { grid-template-columns:1fr; } .form-row { grid-template-columns:1fr; } .enquiry-card { padding:2rem 1.5rem; } }
+  
+    /* ━━━ MOBILE HAMBURGER ━━━ */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 36px; height: 36px;
+      background: none; border: none; cursor: pointer;
+      padding: 4px; z-index: 200;
+    }
+    .nav-hamburger span {
+      display: block; width: 100%; height: 1px;
+      background: currentColor;
+      transition: transform .35s cubic-bezier(.22,1,.36,1), opacity .25s ease, width .3s ease;
+      transform-origin: center;
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; width: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+    .nav-mobile-overlay {
+      display: none;
+      position: fixed; inset: 0; z-index: 150;
+      background: rgba(28,28,28,.97);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2.4rem;
+      opacity: 0;
+      transition: opacity .4s cubic-bezier(.22,1,.36,1);
+      pointer-events: none;
+    }
+    .nav-mobile-overlay.visible {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .nav-mobile-overlay a {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 7vw, 3rem);
+      font-weight: 300;
+      letter-spacing: .12em;
+      color: rgba(255,255,255,.7);
+      text-decoration: none;
+      transition: color .3s;
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity .4s ease, transform .4s cubic-bezier(.22,1,.36,1), color .3s;
+    }
+    .nav-mobile-overlay.visible a {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .nav-mobile-overlay.visible a:nth-child(1) { transition-delay: .08s; }
+    .nav-mobile-overlay.visible a:nth-child(2) { transition-delay: .14s; }
+    .nav-mobile-overlay.visible a:nth-child(3) { transition-delay: .20s; }
+    .nav-mobile-overlay.visible a:nth-child(4) { transition-delay: .26s; }
+    .nav-mobile-overlay.visible a:nth-child(5) { transition-delay: .32s; }
+    .nav-mobile-overlay a:hover { color: var(--gold); }
+    .nav-mobile-close {
+      position: absolute; top: 1.8rem; right: 1.8rem;
+      width: 36px; height: 36px;
+      background: none; border: 1px solid rgba(255,255,255,.15);
+      color: rgba(255,255,255,.6);
+      font-size: 1.1rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color .3s, color .3s;
+    }
+    .nav-mobile-close:hover { border-color: var(--gold); color: var(--gold); }
+
+    @media (max-width: 768px) {
+      .nav-hamburger { display: flex; }
+      .nav-links, .nav-cta { display: none !important; }
+    }
+
+    /* ━━━ PAGE TRANSITION OVERLAY ━━━ */
+    #page-transition {
+      position: fixed; inset: 0; z-index: 9000;
+      background: var(--charcoal);
+      pointer-events: none;
+      transform: scaleY(0);
+      transform-origin: bottom;
+    }
+    #page-transition.leave {
+      transform: scaleY(1);
+      transform-origin: bottom;
+      transition: transform .45s cubic-bezier(.76,0,.24,1);
+    }
+    #page-transition.enter {
+      transform: scaleY(0);
+      transform-origin: top;
+      transition: transform .45s cubic-bezier(.76,0,.24,1);
+    }
+
+    /* ━━━ COOKIE BANNER ━━━ */
+    #cookie-banner {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 8000;
+      background: var(--charcoal);
+      border-top: 1px solid rgba(184,155,106,.25);
+      padding: 1.6rem 3rem;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 2rem; flex-wrap: wrap;
+      transform: translateY(100%);
+      transition: transform .55s cubic-bezier(.22,1,.36,1);
+    }
+    #cookie-banner.visible { transform: translateY(0); }
+    .cookie-text {
+      font-size: .8rem; color: rgba(255,255,255,.55);
+      letter-spacing: .03em; line-height: 1.7;
+      max-width: 640px;
+    }
+    .cookie-text a {
+      color: var(--gold); text-decoration: none;
+      border-bottom: 1px solid rgba(184,155,106,.4);
+      transition: color .3s, border-color .3s;
+    }
+    .cookie-text a:hover { color: var(--gold-lt); border-color: var(--gold-lt); }
+    .cookie-actions { display: flex; gap: .9rem; flex-shrink: 0; }
+    .cookie-btn {
+      font-family: 'Jost', sans-serif; font-weight: 300;
+      font-size: .68rem; letter-spacing: .2em; text-transform: uppercase;
+      border: none; padding: .75rem 1.6rem; cursor: pointer;
+      transition: background .3s, transform .2s;
+    }
+    .cookie-btn-accept { background: var(--gold); color: var(--charcoal); }
+    .cookie-btn-accept:hover { background: var(--gold-lt); transform: translateY(-1px); }
+    .cookie-btn-decline { background: transparent; color: rgba(255,255,255,.4); border: 1px solid rgba(255,255,255,.15); }
+    .cookie-btn-decline:hover { border-color: rgba(255,255,255,.4); color: rgba(255,255,255,.7); }
+
+    /* ━━━ COOKIE SETTINGS MODAL ━━━ */
+    #cookie-modal {
+      position: fixed; inset: 0; z-index: 9500;
+      background: rgba(28,28,28,.85); backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity .3s ease;
+    }
+    #cookie-modal.visible { opacity: 1; pointer-events: all; }
+    .cookie-modal-box {
+      background: var(--white); max-width: 560px; width: 90%;
+      padding: 3rem; position: relative;
+      transform: translateY(20px);
+      transition: transform .35s cubic-bezier(.22,1,.36,1);
+    }
+    #cookie-modal.visible .cookie-modal-box { transform: translateY(0); }
+    .cookie-modal-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem; font-weight: 300; color: var(--ink);
+      margin-bottom: 1rem;
+    }
+    .cookie-modal-desc {
+      font-size: .85rem; line-height: 1.75; color: var(--muted);
+      margin-bottom: 2rem;
+    }
+    .cookie-toggle-row {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      padding: 1rem 0; border-bottom: 1px solid var(--warm); gap: 1.5rem;
+    }
+    .cookie-toggle-info h4 {
+      font-family: 'Jost', sans-serif; font-weight: 400;
+      font-size: .82rem; letter-spacing: .06em; color: var(--ink);
+      margin-bottom: .25rem;
+    }
+    .cookie-toggle-info p { font-size: .75rem; color: var(--muted); line-height: 1.6; }
+    .cookie-toggle {
+      position: relative; flex-shrink: 0;
+      width: 40px; height: 22px;
+    }
+    .cookie-toggle input { opacity: 0; width: 0; height: 0; }
+    .cookie-toggle-slider {
+      position: absolute; inset: 0; cursor: pointer;
+      background: var(--warm); transition: background .3s;
+      border-radius: 22px;
+    }
+    .cookie-toggle-slider::before {
+      content: ''; position: absolute;
+      width: 16px; height: 16px; border-radius: 50%;
+      background: white; bottom: 3px; left: 3px;
+      transition: transform .3s;
+    }
+    .cookie-toggle input:checked + .cookie-toggle-slider { background: var(--gold); }
+    .cookie-toggle input:checked + .cookie-toggle-slider::before { transform: translateX(18px); }
+    .cookie-toggle input:disabled + .cookie-toggle-slider { opacity: .5; cursor: default; }
+    .cookie-modal-actions {
+      margin-top: 2rem; display: flex; gap: .8rem; justify-content: flex-end;
+    }
+    .cookie-modal-close {
+      position: absolute; top: 1.2rem; right: 1.2rem;
+      width: 32px; height: 32px; background: none; border: none;
+      cursor: pointer; color: var(--muted); font-size: 1.1rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: color .3s;
+    }
+    .cookie-modal-close:hover { color: var(--ink); }
+
+  </style>
+</head>
+<body>
+
+  <!-- PAGE TRANSITION OVERLAY -->
+  <div id="page-transition"></div>
+
+  <!-- MOBILE NAV OVERLAY -->
+  <div class="nav-mobile-overlay" id="mobileOverlay">
+    <button class="nav-mobile-close" id="mobileClose" aria-label="Close menu">✕</button>
+    <a href="index.html">Home</a>
+    <a href="properties.html">Properties</a>
+    <a href="index.html#neighbourhoods">Neighbourhoods</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </div>
+
+  <!-- COOKIE BANNER -->
+  <div id="cookie-banner" role="region" aria-label="Cookie consent">
+    <p class="cookie-text">
+      We use cookies to enhance your experience and analyse site traffic.
+      By clicking <strong style="color:rgba(255,255,255,.75)">Accept</strong>, you agree to our use of cookies.
+      <a href="#" class="cookie-settings-trigger">Cookie Settings</a> ·
+      <a href="#">Privacy Policy</a>
+    </p>
+    <div class="cookie-actions">
+      <button class="cookie-btn cookie-btn-decline" id="cookieDecline">Decline</button>
+      <button class="cookie-btn cookie-btn-accept" id="cookieAccept">Accept All</button>
+    </div>
+  </div>
+
+  <!-- COOKIE SETTINGS MODAL -->
+  <div id="cookie-modal" role="dialog" aria-modal="true" aria-labelledby="cookieModalTitle">
+    <div class="cookie-modal-box">
+      <button class="cookie-modal-close" id="cookieModalClose" aria-label="Close">✕</button>
+      <h2 class="cookie-modal-title" id="cookieModalTitle">Cookie Preferences</h2>
+      <p class="cookie-modal-desc">Manage your cookie preferences below. Essential cookies are always enabled as they are necessary for the website to function.</p>
+      <div class="cookie-toggle-row">
+        <div class="cookie-toggle-info">
+          <h4>Essential Cookies</h4>
+          <p>Required for basic site functionality. Cannot be disabled.</p>
+        </div>
+        <label class="cookie-toggle"><input type="checkbox" checked disabled><span class="cookie-toggle-slider"></span></label>
+      </div>
+      <div class="cookie-toggle-row">
+        <div class="cookie-toggle-info">
+          <h4>Analytics Cookies</h4>
+          <p>Help us understand how visitors interact with our site.</p>
+        </div>
+        <label class="cookie-toggle"><input type="checkbox" id="analyticsToggle"><span class="cookie-toggle-slider"></span></label>
+      </div>
+      <div class="cookie-toggle-row">
+        <div class="cookie-toggle-info">
+          <h4>Marketing Cookies</h4>
+          <p>Used to deliver relevant advertising and track campaign effectiveness.</p>
+        </div>
+        <label class="cookie-toggle"><input type="checkbox" id="marketingToggle"><span class="cookie-toggle-slider"></span></label>
+      </div>
+      <div class="cookie-modal-actions">
+        <button class="cookie-btn cookie-btn-decline" id="cookieSavePrefs">Save Preferences</button>
+        <button class="cookie-btn cookie-btn-accept" id="cookieAcceptAll">Accept All</button>
+      </div>
+    </div>
+  </div>
+
+<div class="cursor"><div class="cursor-dot"></div></div>
+<div class="cursor-ring"></div>
+
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <button class="lightbox-nav lightbox-prev" onclick="lightboxStep(-1)">‹</button>
+  <img class="lightbox-img" id="lightboxImg" src="" alt="" />
+  <button class="lightbox-nav lightbox-next" onclick="lightboxStep(1)">›</button>
+  <p class="lightbox-counter" id="lightboxCounter"></p>
+</div>
+
+<nav id="nav" class="scrolled">
+  <a href="index.html" class="nav-logo">Maison</a>
+  <ul class="nav-links">
+    <li><a href="properties.html" data-page="properties" class="active">Properties</a></li>
+    <li><a href="index.html#neighbourhoods" data-page="neighbourhoods">Neighbourhoods</a></li>
+    <li><a href="about.html" data-page="about">About</a></li>
+    <li><a href="contact.html" data-page="contact">Contact</a></li>
+  </ul>
+  <a href="contact.html" class="nav-cta">Enquire</a>
+    <button class="nav-hamburger" id="navHamburger" aria-label="Open menu" style="color:var(--ink)"><span></span><span></span><span></span></button>
+  </nav>
+
+<div id="pageContent"></div>
+
+<script>
+  // ── CURSOR ──
+  const dot = document.querySelector('.cursor-dot');
+  const ring = document.querySelector('.cursor-ring');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+  (function tick(){dot.style.left=mx+'px';dot.style.top=my+'px';rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(tick);})();
+
+  // ── SUPABASE CONFIG ──
+  const SUPA_URL = 'https://xqucpjnjbwohppvorcox.supabase.co';
+  const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhxdWNwam5qYndvaHBwdm9yY294Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NTI4OTksImV4cCI6MjA4ODEyODg5OX0.DP38R5szFsITEQIlr1u4OCF3pJzDYbrZjdT4Cz3bAoM';
+
+  function normaliseProp(l) {
+    return {
+      id: l.id, name: l.title,
+      location: l.location, sublocation: l.city || '',
+      price: l.price_display || String(l.price),
+      pricenote: l.status==='available'?'Guide price':'',
+      status: l.status, badge: l.badge||'',
+      beds: l.bedrooms||0, baths: l.bathrooms||0,
+      area: l.square_meters ? l.square_meters+'m²' : '',
+      plot: '', year: '',
+      tagline: l.description ? l.description.split('.')[0]+'.' : '',
+      desc: l.description||'', desc2: '',
+      locnote: [l.city, l.country].filter(Boolean).join(', '),
+      features: Array.isArray(l.amenities) ? l.amenities.join('\n') : '',
+      imgs: Array.isArray(l.images) ? l.images : [],
+    };
+  }
+
+  // ── LIGHTBOX STATE ──
+  let galleryImages = [];
+  let currentImg = 0;
+
+  function openLightbox(i) {
+    if (!galleryImages[i]) return;
+    currentImg = i;
+    document.getElementById('lightboxImg').src = galleryImages[i];
+    document.getElementById('lightboxCounter').textContent = (i+1)+' / '+galleryImages.length;
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow='hidden';
+  }
+  function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); document.body.style.overflow=''; }
+  function lightboxStep(dir) {
+    currentImg=(currentImg+dir+galleryImages.length)%galleryImages.length;
+    const img=document.getElementById('lightboxImg');
+    img.style.opacity='0';
+    setTimeout(()=>{ img.src=galleryImages[currentImg]; document.getElementById('lightboxCounter').textContent=(currentImg+1)+' / '+galleryImages.length; img.style.opacity='1'; },180);
+  }
+  document.getElementById('lightbox').addEventListener('click',e=>{ if(e.target===document.getElementById('lightbox')) closeLightbox(); });
+  document.addEventListener('keydown',e=>{ if(!document.getElementById('lightbox').classList.contains('open')) return; if(e.key==='Escape') closeLightbox(); if(e.key==='ArrowRight') lightboxStep(1); if(e.key==='ArrowLeft') lightboxStep(-1); });
+
+  // ── ENQUIRY ──
+  async function submitEnquiry() {
+    const n=document.getElementById('fName'); const em=document.getElementById('fEmail');
+    const msg=document.getElementById('fMessage');
+    if (!n||!em||!n.value||!em.value) {
+      [n,em].filter(Boolean).forEach(el=>{ el.style.borderColor='#c0392b'; setTimeout(()=>el.style.borderColor='',1800); });
+      return;
+    }
+    // Save to Supabase inquiries
+    const params = new URLSearchParams(window.location.search);
+    try {
+      await fetch(SUPA_URL+'/rest/v1/inquiries', {
+        method:'POST',
+        headers:{ 'apikey':SUPA_KEY, 'Authorization':'Bearer '+SUPA_KEY, 'Content-Type':'application/json', 'Prefer':'return=minimal' },
+        body: JSON.stringify({
+          property_id: params.get('id') || null,
+          name: n.value,
+          email: em.value,
+          phone: document.getElementById('fPhone')?.value||'',
+          message: msg?.value||'',
+          inquiry_type: 'viewing'
+        })
+      });
+    } catch(e) { console.warn('Inquiry save failed', e); }
+    const form=document.getElementById('enquiryForm');
+    form.style.transition='opacity .3s'; form.style.opacity='0';
+    setTimeout(()=>{ form.style.display='none'; const s=document.getElementById('formSuccess'); s.style.display='block'; s.style.opacity='0'; requestAnimationFrame(()=>{ s.style.transition='opacity .5s'; s.style.opacity='1'; }); },300);
+  }
+
+  // ── REVEAL ──
+  const io = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{ if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target);} });
+  },{threshold:.1});
+
+  // ── HTML ESCAPE ──
+  function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+  // ── RENDER ──
+  function render(l, allListings) {
+    document.title = l.name + ' — MAISON';
+
+    galleryImages = Array.isArray(l.imgs) && l.imgs.length ? l.imgs.slice(0,6) : [];
+    const shown = galleryImages.slice(0,5);
+    const extra = Math.max(0, galleryImages.length - 5);
+
+    function thumbHTML(idx, isMainSlot) {
+      const src = shown[idx];
+      if (isMainSlot) {
+        return `<div class="gallery-main" onclick="openLightbox(${idx})">
+          ${src ? `<img src="${esc(src)}" alt="${esc(l.name)}" />` : '<div class="gallery-empty" style="width:100%;height:100%"><span>No image</span></div>'}
+          ${l.badge ? `<div class="gallery-badge">${esc(l.badge)}</div>` : ''}
+        </div>`;
+      }
+      if (!src) return `<div class="gallery-thumb"><div class="gallery-empty" style="width:100%;height:100%"><span>No image</span></div></div>`;
+      const isLast = idx===4 && extra>0;
+      return `<div class="gallery-thumb${isLast?' has-more':''}"${isLast?` data-more="${extra}"`:''}  onclick="openLightbox(${idx})">
+        <img src="${esc(src)}" alt="${esc(l.name)}" />
+      </div>`;
+    }
+
+    const statusMap = {active:'For Sale',reduced:'Price Reduced',soon:'Coming Soon',sold:'Sold'};
+    const eyebrow = 'Exceptional Residence · ' + (statusMap[l.status]||'For Sale');
+
+    const words = (l.name||'').split(' ');
+    const nameHTML = words.length > 1
+      ? esc(words.slice(0,-1).join(' ')) + '<br><em>' + esc(words.slice(-1)[0]) + '</em>'
+      : '<em>' + esc(l.name) + '</em>';
+
+    const specs = [
+      l.beds  && {v:l.beds,  lb:'Bedrooms'},
+      l.baths && {v:l.baths, lb:'Bathrooms'},
+      l.area  && {v:esc(l.area),  lb:'Living area'},
+      l.plot  && {v:esc(l.plot),  lb:'Plot size'},
+      l.year  && {v:l.year,  lb:'Year built'},
+    ].filter(Boolean);
+
+    const featureList = (l.features||'').split('\n').map(f=>f.trim()).filter(Boolean);
+
+    const similar = allListings.filter(x=>x.id!==l.id && x.status!=='sold').slice(0,3);
+
+    const html = `
+      <div class="breadcrumb">
+        <a href="index.html">Home</a><span class="breadcrumb-sep">·</span>
+        <a href="#">Properties</a><span class="breadcrumb-sep">·</span>
+        ${l.location?`<a href="#">${esc(l.location.split('·')[0].trim())}</a><span class="breadcrumb-sep">·</span>`:''}
+        ${esc(l.name)}
+      </div>
+
+      <div class="gallery-hero">
+        ${thumbHTML(0, true)}
+        ${thumbHTML(1, false)}
+        ${thumbHTML(2, false)}
+        ${thumbHTML(3, false)}
+        ${thumbHTML(4, false)}
+      </div>
+
+      <div class="page-wrap">
+        <div>
+          <p class="prop-eyebrow reveal">${esc(eyebrow)}</p>
+          <h1 class="prop-title reveal reveal-delay-1">${nameHTML}</h1>
+          <p class="prop-location reveal reveal-delay-2">
+            <svg width="12" height="16" viewBox="0 0 12 16" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M6 1C3.24 1 1 3.24 1 6c0 4.25 5 9 5 9s5-4.75 5-9c0-2.76-2.24-5-5-5z"/><circle cx="6" cy="6" r="1.5"/></svg>
+            ${esc(l.location)}${l.sublocation?' · '+esc(l.sublocation):''}
+          </p>
+          <p class="prop-price reveal reveal-delay-2">${esc(l.price)}</p>
+          <p class="prop-price-note reveal reveal-delay-2">${esc(l.pricenote||'')}</p>
+
+          ${specs.length ? `<div class="spec-strip reveal">${specs.map(s=>`
+            <div class="spec-item"><div class="spec-value">${s.v}</div><div class="spec-label">${esc(s.lb)}</div></div>`).join('')}
+          </div>` : ''}
+
+          <div class="reveal">
+            <p class="section-label">About the Property</p>
+            ${l.tagline?`<p class="prop-tagline">${esc(l.tagline)}</p>`:''}
+            ${l.desc?`<p class="prop-desc-body">${esc(l.desc)}</p>`:''}
+            ${l.desc2?`<p class="prop-desc-body">${esc(l.desc2)}</p>`:''}
+          </div>
+
+          ${featureList.length ? `<div class="reveal" style="margin-top:2.5rem">
+            <p class="section-label">Features &amp; Amenities</p>
+            <div class="features-grid">${featureList.map(f=>`<div class="feature-item">${esc(f)}</div>`).join('')}</div>
+          </div>` : ''}
+
+          <div class="floorplan-strip reveal">
+            <div class="floorplan-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="#B89B6A" stroke-width="1.2"><rect x="2" y="2" width="18" height="18"/><path d="M2 8h8M10 8v12M10 14h10"/></svg></div>
+            <div class="floorplan-text"><h4>View Floor Plans</h4><p>Available on request from your advisor</p></div>
+            <span class="floorplan-arrow">→</span>
+          </div>
+
+          <div class="map-section reveal">
+            <p class="section-label">Location</p>
+            <h3 style="font-family:'Cormorant Garamond',serif;font-weight:400;font-size:1.3rem;margin-bottom:1.5rem">${esc(l.location)}</h3>
+            <div class="map-placeholder">
+              <div class="map-pin"><div class="map-pin-dot"></div></div>
+              <span class="map-label">${esc(l.location)}</span>
+            </div>
+            ${l.locnote?`<p style="font-size:.78rem;color:var(--muted);margin-top:1rem;line-height:1.7">${esc(l.locnote)}</p>`:''}
+          </div>
+        </div>
+
+        <aside class="sidebar">
+          <div class="enquiry-card">
+            <h3 class="enquiry-heading">Request a viewing</h3>
+            <p class="enquiry-sub">Private viewings arranged within 48 hours.</p>
+            <div id="enquiryForm">
+              <div class="form-row">
+                <div class="form-group"><label class="form-label">First name</label><input type="text" class="form-input" id="fName" placeholder="Henri" /></div>
+                <div class="form-group"><label class="form-label">Last name</label><input type="text" class="form-input" placeholder="Moreau" /></div>
+              </div>
+              <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" id="fEmail" placeholder="henri@example.com" /></div>
+              <div class="form-group"><label class="form-label">Phone</label><input type="tel" class="form-input" placeholder="+33 6 00 00 00 00" /></div>
+              <div class="form-group"><label class="form-label">Preferred timing</label>
+                <select class="form-select"><option value="" disabled selected>Select a preference</option><option>As soon as possible</option><option>Within 2 weeks</option><option>This month</option><option>No rush — within 3 months</option></select>
+              </div>
+              <div class="form-group"><label class="form-label">Message (optional)</label><textarea class="form-textarea" placeholder="Any specific requirements or questions…"></textarea></div>
+              <button class="btn-enquire" onclick="submitEnquiry()">Send Enquiry</button>
+              <div class="enquiry-divider">or</div>
+              <button class="btn-call">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M13 9.5c0 .28-.06.55-.19.81-.12.26-.3.5-.52.71a2.4 2.4 0 0 1-1.65.68c-.43 0-.9-.1-1.4-.31a13.2 13.2 0 0 1-1.37-.71 13.5 13.5 0 0 1-1.32-1.04 13.1 13.1 0 0 1-1.03-1.32 13 13 0 0 1-.7-1.36C4.11 5.5 4 5.04 4 4.6c0-.42.09-.82.26-1.19.17-.37.43-.71.78-.99.38-.3.8-.46 1.24-.46.17 0 .34.04.5.11.16.07.3.18.41.34l1.42 2c.11.16.17.31.17.52 0 .17-.05.34-.14.5L8 5.93c-.13.2-.13.42 0 .62l1.45 1.45c.2.13.42.13.62 0l.5-.43c.16-.1.32-.14.5-.14.17 0 .34.05.5.16l2 1.43c.16.12.27.26.34.43.07.17.1.35.09.55z"/></svg>
+                Schedule a call
+              </button>
+            </div>
+            <div class="form-success" id="formSuccess">
+              <svg width="36" height="36" viewBox="0 0 36 36" fill="none" stroke="#B89B6A" stroke-width="1.5"><circle cx="18" cy="18" r="16"/><path d="M11 18l5 5 9-10"/></svg>
+              <h4>Enquiry received</h4>
+              <p>Your dedicated advisor will be in touch within 24 hours.</p>
+            </div>
+            <div class="advisor-strip">
+              <div class="advisor-avatar"></div>
+              <div><p class="advisor-name">Isabelle Marchand</p><p class="advisor-role">Senior Property Advisor</p></div>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <section class="similar-section">
+        <div class="similar-inner">
+          <div class="similar-header reveal">
+            <div>
+              <p class="section-label">You May Also Consider</p>
+              <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,3.5vw,3.2rem);font-weight:300;line-height:1.05;color:var(--ink)">Similar <em style="font-style:italic">Residences</em></h2>
+            </div>
+            <a href="properties.html" class="similar-link">View all listings →</a>
+          </div>
+          <div class="similar-grid">
+            ${similar.length ? similar.map((s,i)=>`
+              <div class="sim-card reveal${i?' reveal-delay-'+i:''}" onclick="location.href='property.html?id=${s.id}'">
+                <img class="sim-card-img" src="${esc(s.imgs&&s.imgs[0]?s.imgs[0]:'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=700&q=80')}" alt="${esc(s.name)}" />
+                <div class="sim-overlay"></div>
+                <div class="sim-info">
+                  <p class="sim-tag">${esc(s.location)}</p>
+                  <h3 class="sim-name">${esc(s.name)}</h3>
+                  <p class="sim-price">${esc(s.price)}${s.beds?' · '+s.beds+' beds':''}</p>
+                </div>
+              </div>`).join('')
+            : '<p style="color:var(--muted);font-size:.85rem;padding:2rem 0;grid-column:1/-1">No similar listings available.</p>'}
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        <div class="footer-top">
+          <div>
+            <a href="index.html" class="footer-brand-name">Maison</a>
+            <p class="footer-tagline">Connecting extraordinary people with the finest homes in the world's most coveted addresses since 1994.</p>
+            <div class="footer-social">
+              <a href="https://instagram.com" target="_blank" rel="noopener" class="social-link" aria-label="Instagram">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+              </a>
+              <a href="https://linkedin.com" target="_blank" rel="noopener" class="social-link" aria-label="LinkedIn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+              </a>
+              <a href="https://twitter.com" target="_blank" rel="noopener" class="social-link" aria-label="X / Twitter">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+              </a>
+              <a href="https://pinterest.com" target="_blank" rel="noopener" class="social-link" aria-label="Pinterest">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.236 2.636 7.855 6.356 9.312-.088-.791-.167-2.005.035-2.868.181-.78 1.172-4.97 1.172-4.97s-.299-.598-.299-1.482c0-1.388.806-2.428 1.808-2.428.853 0 1.267.641 1.267 1.408 0 .858-.546 2.141-.828 3.33-.236.995.499 1.806 1.476 1.806 1.771 0 3.133-1.867 3.133-4.563 0-2.386-1.716-4.054-4.165-4.054-2.837 0-4.502 2.128-4.502 4.328 0 .857.33 1.775.741 2.277a.3.3 0 01.069.284c-.076.313-.244.995-.277 1.134-.044.183-.146.222-.336.134-1.249-.581-2.03-2.407-2.03-3.874 0-3.154 2.292-6.052 6.608-6.052 3.469 0 6.165 2.473 6.165 5.776 0 3.447-2.173 6.22-5.19 6.22-1.013 0-1.966-.527-2.292-1.148l-.623 2.378c-.226.869-.835 1.958-1.244 2.621.937.29 1.931.446 2.962.446 5.523 0 10-4.477 10-10S17.523 2 12 2z"/></svg>
+              </a>
+              <a href="https://youtube.com" target="_blank" rel="noopener" class="social-link" aria-label="YouTube">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 001.46 6.42 29 29 0 001 12a29 29 0 00.46 5.58 2.78 2.78 0 001.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.96A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none"/></svg>
+              </a>
+            </div>
+          </div>
+          <div>
+            <p class="footer-col-title">Properties</p>
+            <ul class="footer-links">
+              <li><a href="properties.html">For Sale</a></li>
+              <li><a href="properties.html">For Rent</a></li>
+              <li><a href="properties.html">New Developments</a></li>
+              <li><a href="properties.html">Off Market</a></li>
+              <li><a href="property.html">Sold Archive</a></li>
+            </ul>
+          </div>
+          <div>
+            <p class="footer-col-title">Company</p>
+            <ul class="footer-links">
+              <li><a href="about.html">Our Story</a></li>
+              <li><a href="about.html#team">Advisors</a></li>
+              <li><a href="about.html#values">Our Values</a></li>
+              <li><a href="contact.html">Press</a></li>
+              <li><a href="contact.html">Careers</a></li>
+            </ul>
+          </div>
+          <div>
+            <p class="footer-col-title">Contact</p>
+            <ul class="footer-links">
+              <li><a href="contact.html">London HQ</a></li>
+              <li><a href="contact.html">New York Office</a></li>
+              <li><a href="contact.html">Paris Atelier</a></li>
+              <li><a href="mailto:hello@maison.com">hello@maison.com</a></li>
+              <li><a href="tel:+442071234567">+44 20 7123 4567</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p class="footer-copy">© 2026 Maison. All rights reserved.</p>
+          <div class="footer-bottom-links">
+            <a href="#" class="footer-bottom-link">Privacy Policy</a>
+            <a href="#" class="footer-bottom-link">Terms of Use</a>
+            <a href="#" class="footer-bottom-link">Cookie Settings</a>
+          </div>
+          <p class="footer-copy">Member of the Luxury Real Estate Network</p>
+        </div>
+      </footer>
+    `;
+
+    document.getElementById('pageContent').innerHTML = html;
+    document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+  }
+
+  // ── BOOT: load from Supabase ──
+  (async function() {
+    const params = new URLSearchParams(window.location.search);
+    const urlId = params.get('id');
+    const content = document.getElementById('pageContent');
+
+    // Show skeleton
+    content.innerHTML = '<div style="padding:8rem 4rem;text-align:center;color:var(--muted);font-size:.9rem;letter-spacing:.1em">Loading property…</div>';
+
+    try {
+      let query = urlId
+        ? SUPA_URL+'/rest/v1/properties?id=eq.'+encodeURIComponent(urlId)+'&select=*&limit=1'
+        : SUPA_URL+'/rest/v1/properties?select=*&order=sort_order.asc&limit=1';
+
+      const [propRes, allRes] = await Promise.all([
+        fetch(query, { headers:{ 'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY } }),
+        fetch(SUPA_URL+'/rest/v1/properties?select=id,title,location,price,price_display,bedrooms,images,badge,status,property_type&order=sort_order.asc', { headers:{ 'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY } })
+      ]);
+
+      const propData = await propRes.json();
+      const allData = await allRes.json();
+
+      const raw = Array.isArray(propData) && propData[0];
+      if (!raw) { content.innerHTML = '<div style="padding:8rem 4rem;text-align:center"><h2 style="font-family:\'Cormorant Garamond\',serif;font-size:2rem;color:var(--ink)">Property not found</h2><p style="margin-top:1rem"><a href="properties.html" style="color:var(--gold)">← Back to listings</a></p></div>'; return; }
+
+      const l = normaliseProp(raw);
+      const allListings = Array.isArray(allData) ? allData.map(x=>({
+        id:x.id, name:x.title, location:x.location,
+        price: x.price_display||String(x.price),
+        beds:x.bedrooms, status:x.status, badge:x.badge||'',
+        type: x.property_type, imgs: x.images||[]
+      })) : [];
+
+      render(l, allListings);
+    } catch(e) {
+      content.innerHTML = '<div style="padding:8rem 4rem;text-align:center;color:var(--muted)">Unable to load property. Please try again.</div>';
+    }
+  })();
+
+</script>
+  <script>
+
+    // ━━━ PAGE TRANSITIONS ━━━
+    (function() {
+      var overlay = document.getElementById('page-transition');
+      // Enter animation on load
+      overlay.classList.add('enter');
+      setTimeout(function() { overlay.classList.remove('enter'); }, 10);
+
+      // Leave animation on internal link click
+      document.querySelectorAll('a[href]').forEach(function(link) {
+        var href = link.getAttribute('href');
+        if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto') || href.startsWith('tel')) return;
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          var dest = this.getAttribute('href');
+          overlay.classList.add('leave');
+          setTimeout(function() { window.location.href = dest; }, 460);
+        });
+      });
+    })();
+
+    // ━━━ HAMBURGER MENU ━━━
+    (function() {
+      var burger = document.getElementById('navHamburger');
+      var overlay = document.getElementById('mobileOverlay');
+      var closeBtn = document.getElementById('mobileClose');
+      if (!burger || !overlay) return;
+
+      function openMenu() {
+        overlay.style.display = 'flex';
+        requestAnimationFrame(function() { overlay.classList.add('visible'); });
+        burger.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeMenu() {
+        overlay.classList.remove('visible');
+        burger.classList.remove('open');
+        document.body.style.overflow = '';
+        setTimeout(function() {
+          if (!overlay.classList.contains('visible')) overlay.style.display = 'none';
+        }, 420);
+      }
+      burger.addEventListener('click', function() {
+        if (overlay.classList.contains('visible')) closeMenu(); else openMenu();
+      });
+      if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+      // Close on link click
+      overlay.querySelectorAll('a').forEach(function(a) {
+        a.addEventListener('click', function() { closeMenu(); });
+      });
+    })();
+
+    // ━━━ COOKIE CONSENT ━━━
+    (function() {
+      var banner = document.getElementById('cookie-banner');
+      var modal  = document.getElementById('cookie-modal');
+      var COOKIE_KEY = 'maison_cookie_consent';
+
+      function getConsent() {
+        try { return JSON.parse(localStorage.getItem(COOKIE_KEY)); } catch(e) { return null; }
+      }
+      function saveConsent(val) {
+        try { localStorage.setItem(COOKIE_KEY, JSON.stringify(val)); } catch(e) {}
+      }
+      function hideBanner() {
+        banner.classList.remove('visible');
+        setTimeout(function() { banner.style.display = 'none'; }, 600);
+      }
+      function showModal() {
+        modal.style.display = 'flex';
+        requestAnimationFrame(function() { modal.classList.add('visible'); });
+        var consent = getConsent() || {};
+        var aT = document.getElementById('analyticsToggle');
+        var mT = document.getElementById('marketingToggle');
+        if (aT) aT.checked = !!consent.analytics;
+        if (mT) mT.checked = !!consent.marketing;
+      }
+      function hideModal() {
+        modal.classList.remove('visible');
+        setTimeout(function() { if (!modal.classList.contains('visible')) modal.style.display = 'none'; }, 350);
+      }
+
+      // Show banner after delay if no consent saved
+      if (!getConsent()) {
+        setTimeout(function() {
+          banner.style.display = 'flex';
+          requestAnimationFrame(function() { banner.classList.add('visible'); });
+        }, 1800);
+      }
+
+      var accept = document.getElementById('cookieAccept');
+      var decline = document.getElementById('cookieDecline');
+      var acceptAll = document.getElementById('cookieAcceptAll');
+      var savePrefs = document.getElementById('cookieSavePrefs');
+      var closeModal = document.getElementById('cookieModalClose');
+
+      if (accept) accept.addEventListener('click', function() {
+        saveConsent({ essential: true, analytics: true, marketing: true });
+        hideBanner();
+      });
+      if (decline) decline.addEventListener('click', function() {
+        saveConsent({ essential: true, analytics: false, marketing: false });
+        hideBanner();
+      });
+      if (acceptAll) acceptAll.addEventListener('click', function() {
+        saveConsent({ essential: true, analytics: true, marketing: true });
+        hideModal(); hideBanner();
+      });
+      if (savePrefs) savePrefs.addEventListener('click', function() {
+        var aT = document.getElementById('analyticsToggle');
+        var mT = document.getElementById('marketingToggle');
+        saveConsent({ essential: true, analytics: aT ? aT.checked : false, marketing: mT ? mT.checked : false });
+        hideModal(); hideBanner();
+      });
+      if (closeModal) closeModal.addEventListener('click', hideModal);
+
+      // Open modal from footer link & banner settings link
+      document.querySelectorAll('.cookie-settings-trigger, [href*="Cookie"]').forEach(function(el) {
+        el.addEventListener('click', function(e) {
+          // Only intercept non-page-nav links
+          if (el.tagName === 'A' && el.classList.contains('footer-bottom-link')) {
+            e.preventDefault();
+            showModal();
+          }
+        });
+      });
+      document.querySelectorAll('.cookie-settings-trigger').forEach(function(el) {
+        el.addEventListener('click', function(e) { e.preventDefault(); showModal(); });
+      });
+      // Close modal on overlay click
+      if (modal) modal.addEventListener('click', function(e) { if (e.target === modal) hideModal(); });
+    })();
+
+  </script>
+</body>
+</html>

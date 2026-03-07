@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Browse Maison's curated collection of luxury properties for sale and rent worldwide. Filter by location, price, and property type." />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Exceptional Properties — MAISON Listings" />
+  <meta property="og:description" content="Browse Maison's curated collection of luxury properties for sale and rent worldwide. Filter by location, price, and property type." />
+  <meta property="og:image" content="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80" />
+  <meta property="og:url" content="https://maisonrealty.com/properties.html" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Exceptional Properties — MAISON Listings" />
+  <meta name="twitter:description" content="Browse Maison's curated collection of luxury properties for sale and rent worldwide. Filter by location, price, and property type." />
+  <meta name="twitter:image" content="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80" />
+  <link rel="canonical" href="https://maisonrealty.com/properties.html" />
+  <title>Properties — MAISON</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@200;300;400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cream:#F6F3EE; --warm:#EDE8DF; --charcoal:#1C1C1C; --ink:#2E2B27;
+      --muted:#8A8278; --gold:#B89B6A; --gold-lt:#D4BC94; --white:#FDFCFA;
+    }
+    html { font-size:16px; scroll-behavior:smooth; }
+    body { background:var(--cream); color:var(--ink); font-family:'Jost',sans-serif; font-weight:300; letter-spacing:0.01em; overflow-x:hidden; cursor:none; }
+
+    /* CURSOR */
+    .cursor { position:fixed; top:0; left:0; z-index:9999; pointer-events:none; mix-blend-mode:difference; }
+    .cursor-dot { width:8px; height:8px; border-radius:50%; background:var(--charcoal); transform:translate(-50%,-50%); }
+    .cursor-ring { position:fixed; top:0; left:0; z-index:9998; width:40px; height:40px; border-radius:50%; border:1px solid var(--charcoal); transform:translate(-50%,-50%); pointer-events:none; transition:transform .18s ease,width .25s ease,height .25s ease,opacity .25s ease; opacity:.5; }
+
+    /* NAV */
+    nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:1.2rem 4rem; background:rgba(246,243,238,.95); backdrop-filter:blur(12px); border-bottom:1px solid rgba(184,155,106,.2); }
+    .nav-logo { font-family:'Cormorant Garamond',serif; font-size:1.5rem; font-weight:300; letter-spacing:.22em; text-transform:uppercase; color:var(--ink); text-decoration:none; }
+    .nav-links { display:flex; gap:2.8rem; list-style:none; }
+    .nav-links a { font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color .3s; }
+    .nav-links a:hover, .nav-links a.active { color:var(--gold); }
+    .nav-cta { font-family:'Jost',sans-serif; font-weight:300; font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; color:var(--charcoal); background:var(--gold-lt); border:none; padding:.7rem 1.8rem; cursor:none; transition:background .3s,transform .2s; text-decoration:none; }
+    .nav-cta:hover { background:var(--gold); transform:translateY(-1px); }
+
+    /* REVEAL */
+    .reveal { opacity:0; transform:translateY(20px); transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1); }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+
+    /* PAGE HEADER */
+    .page-header {
+      margin-top:73px;
+      background:var(--charcoal);
+      padding:5rem 4rem 4rem;
+      position:relative; overflow:hidden;
+    }
+    .page-header::before {
+      content:'';
+      position:absolute; inset:0;
+      background:url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1800&q=60') center/cover;
+      opacity:.12;
+    }
+    .page-header-inner { max-width:1320px; margin:0 auto; position:relative; z-index:1; }
+    .page-eyebrow { font-size:.65rem; letter-spacing:.38em; text-transform:uppercase; color:var(--gold); margin-bottom:1rem; }
+    .page-title { font-family:'Cormorant Garamond',serif; font-size:clamp(3rem,6vw,5.5rem); font-weight:300; line-height:.95; color:var(--white); letter-spacing:-.01em; margin-bottom:1rem; }
+    .page-title em { font-style:italic; color:var(--gold-lt); }
+    .page-subtitle { font-size:.9rem; color:rgba(255,255,255,.45); letter-spacing:.04em; max-width:480px; }
+
+    /* SEARCH BAR */
+    .search-bar-wrap {
+      background:var(--white);
+      border-bottom:1px solid var(--warm);
+      position:sticky; top:73px; z-index:90;
+      box-shadow:0 4px 32px rgba(28,28,28,.06);
+    }
+    .search-bar-inner {
+      max-width:1320px; margin:0 auto;
+      padding:0 4rem;
+      display:flex; align-items:stretch; gap:0;
+    }
+
+    /* Search input */
+    .search-input-wrap {
+      flex:1; display:flex; align-items:center; gap:1rem;
+      padding:1.3rem 1.8rem 1.3rem 0;
+      border-right:1px solid var(--warm);
+    }
+    .search-icon { color:var(--gold); flex-shrink:0; }
+    .search-input {
+      flex:1; background:transparent; border:none; outline:none;
+      font-family:'Jost',sans-serif; font-weight:300; font-size:.9rem;
+      color:var(--ink); letter-spacing:.02em;
+    }
+    .search-input::placeholder { color:var(--muted); }
+
+    /* Filter items */
+    .filter-item {
+      position:relative; display:flex; align-items:center;
+      padding:0 1.6rem; border-right:1px solid var(--warm);
+      cursor:none;
+    }
+    .filter-item:last-of-type { border-right:none; }
+    .filter-btn {
+      display:flex; align-items:center; gap:.6rem;
+      background:none; border:none; cursor:none;
+      font-family:'Jost',sans-serif; font-weight:300;
+      font-size:.72rem; letter-spacing:.16em; text-transform:uppercase;
+      color:var(--muted); transition:color .25s; padding:1.3rem 0;
+      white-space:nowrap;
+    }
+    .filter-btn:hover, .filter-btn.active { color:var(--ink); }
+    .filter-btn.has-value { color:var(--gold); }
+    .filter-btn svg { transition:transform .25s; }
+    .filter-btn.open svg { transform:rotate(180deg); }
+    .filter-count {
+      display:inline-flex; align-items:center; justify-content:center;
+      width:16px; height:16px; border-radius:50%;
+      background:var(--gold); color:var(--charcoal);
+      font-size:.5rem; letter-spacing:0; font-weight:400;
+    }
+
+    /* Dropdown panels */
+    .filter-dropdown {
+      position:absolute; top:calc(100% + 1px); left:0;
+      min-width:280px; background:var(--white);
+      border:1px solid var(--warm); border-top:2px solid var(--gold);
+      box-shadow:0 16px 48px rgba(28,28,28,.12);
+      opacity:0; pointer-events:none; transform:translateY(-8px);
+      transition:opacity .22s ease,transform .22s ease;
+      z-index:200;
+    }
+    .filter-dropdown.open { opacity:1; pointer-events:all; transform:translateY(0); }
+    .dropdown-inner { padding:1.6rem; }
+    .dropdown-label { font-size:.6rem; letter-spacing:.28em; text-transform:uppercase; color:var(--gold); margin-bottom:1rem; display:block; }
+
+    /* Range slider */
+    .range-wrap { padding:.4rem 0 .8rem; }
+    .range-row { display:flex; align-items:center; gap:.8rem; margin-bottom:1rem; }
+    .range-input-box {
+      flex:1; background:var(--cream); border:1px solid var(--warm);
+      padding:.6rem .8rem; font-family:'Jost',sans-serif; font-size:.8rem;
+      color:var(--ink); outline:none; border-radius:0;
+      transition:border-color .2s;
+    }
+    .range-input-box:focus { border-color:var(--gold); }
+    .range-sep { font-size:.7rem; color:var(--muted); }
+    .range-slider-track { position:relative; height:2px; background:var(--warm); margin:.8rem 0; }
+    .range-slider-fill { position:absolute; height:100%; background:var(--gold); }
+    .range-slider { position:absolute; width:100%; height:100%; opacity:0; cursor:none; }
+
+    /* Checkbox options */
+    .check-options { display:flex; flex-direction:column; gap:.3rem; }
+    .check-opt {
+      display:flex; align-items:center; gap:.9rem;
+      padding:.55rem .8rem; cursor:none;
+      transition:background .18s;
+    }
+    .check-opt:hover { background:var(--cream); }
+    .check-opt input[type=checkbox] { display:none; }
+    .check-box {
+      width:16px; height:16px; flex-shrink:0;
+      border:1px solid var(--warm); position:relative;
+      transition:border-color .2s,background .2s;
+    }
+    .check-opt input:checked ~ .check-box { border-color:var(--gold); background:var(--gold); }
+    .check-opt input:checked ~ .check-box::after {
+      content:''; position:absolute; inset:0;
+      background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 6l3 3 5-5' stroke='%231C1C1C' stroke-width='1.5' fill='none'/%3E%3C/svg%3E") center/10px no-repeat;
+    }
+    .check-label { font-size:.82rem; color:var(--ink); }
+    .check-sub { font-size:.68rem; color:var(--muted); margin-left:auto; }
+
+    /* Beds pills */
+    .beds-pills { display:flex; gap:.5rem; flex-wrap:wrap; }
+    .beds-pill {
+      padding:.45rem 1rem; border:1px solid var(--warm); background:transparent;
+      font-family:'Jost',sans-serif; font-size:.72rem; letter-spacing:.1em;
+      color:var(--muted); cursor:none; transition:all .2s;
+    }
+    .beds-pill:hover { border-color:var(--gold-lt); color:var(--ink); }
+    .beds-pill.active { border-color:var(--gold); background:var(--gold); color:var(--charcoal); }
+
+    /* Apply / clear */
+    .dropdown-actions { display:flex; gap:.6rem; padding:1rem 1.6rem; border-top:1px solid var(--warm); }
+    .btn-apply { flex:1; padding:.7rem; background:var(--charcoal); color:var(--white); border:none; cursor:none; font-family:'Jost',sans-serif; font-size:.68rem; letter-spacing:.18em; text-transform:uppercase; transition:background .2s; }
+    .btn-apply:hover { background:var(--gold); color:var(--charcoal); }
+    .btn-clear-filter { padding:.7rem 1rem; background:transparent; color:var(--muted); border:1px solid var(--warm); cursor:none; font-family:'Jost',sans-serif; font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; transition:color .2s,border-color .2s; }
+    .btn-clear-filter:hover { color:var(--ink); border-color:var(--ink); }
+
+    /* Search submit */
+    .search-submit { display:flex; align-items:center; padding:0 2rem; background:var(--charcoal); color:var(--white); border:none; cursor:none; font-family:'Jost',sans-serif; font-size:.68rem; letter-spacing:.2em; text-transform:uppercase; gap:.7rem; transition:background .25s; white-space:nowrap; }
+    .search-submit:hover { background:var(--gold); color:var(--charcoal); }
+
+    /* RESULTS BAR */
+    .results-bar {
+      max-width:1320px; margin:0 auto;
+      padding:2rem 4rem 0;
+      display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap;
+    }
+    .results-count { font-size:.8rem; color:var(--muted); letter-spacing:.06em; }
+    .results-count strong { color:var(--ink); font-weight:400; }
+    .active-filters { display:flex; gap:.5rem; flex-wrap:wrap; align-items:center; }
+    .filter-tag {
+      display:flex; align-items:center; gap:.5rem;
+      background:var(--warm); padding:.3rem .9rem .3rem 1rem;
+      font-size:.65rem; letter-spacing:.12em; text-transform:uppercase; color:var(--ink);
+    }
+    .filter-tag-remove { background:none; border:none; cursor:none; color:var(--muted); font-size:.8rem; line-height:1; padding:0; transition:color .2s; }
+    .filter-tag-remove:hover { color:var(--gold); }
+    .clear-all-btn { font-size:.65rem; letter-spacing:.18em; text-transform:uppercase; color:var(--gold); background:none; border:none; cursor:none; padding:.3rem .6rem; transition:color .2s; border-bottom:1px solid transparent; }
+    .clear-all-btn:hover { border-bottom-color:var(--gold); }
+
+    .sort-wrap { display:flex; align-items:center; gap:.8rem; }
+    .sort-label { font-size:.65rem; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); }
+    .sort-select {
+      appearance:none; background:transparent; border:none; border-bottom:1px solid var(--warm);
+      font-family:'Jost',sans-serif; font-size:.75rem; color:var(--ink); letter-spacing:.06em;
+      padding:.3rem 1.6rem .3rem .5rem; outline:none; cursor:none;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238A8278' stroke-width='1.2' fill='none'/%3E%3C/svg%3E");
+      background-repeat:no-repeat; background-position:right .2rem center;
+      transition:border-color .2s;
+    }
+    .sort-select:focus { border-bottom-color:var(--gold); }
+
+    .view-toggle { display:flex; gap:.3rem; }
+    .view-btn { width:34px; height:34px; background:none; border:1px solid var(--warm); cursor:none; display:grid; place-items:center; color:var(--muted); transition:all .2s; }
+    .view-btn.active, .view-btn:hover { border-color:var(--gold); color:var(--gold); background:var(--cream); }
+
+    /* LISTINGS GRID */
+    .listings-section { padding:2.5rem 4rem 7rem; }
+    .listings-inner { max-width:1320px; margin:0 auto; }
+
+    .listings-grid {
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:2px;
+      transition:opacity .3s ease;
+    }
+    .listings-grid.list-view {
+      grid-template-columns:1fr;
+      gap:2px;
+    }
+
+    /* Property card */
+    .prop-card {
+      position:relative; overflow:hidden; cursor:none;
+      background:var(--white);
+      transition:transform .4s cubic-bezier(.22,1,.36,1);
+    }
+    .prop-card:hover { z-index:2; }
+    .prop-card-img-wrap { height:320px; overflow:hidden; position:relative; }
+    .prop-card-img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .8s cubic-bezier(.22,1,.36,1),filter .5s ease; }
+    .prop-card:hover .prop-card-img { transform:scale(1.05); filter:brightness(.9); }
+    .prop-card-badge { position:absolute; top:1.2rem; right:1.2rem; font-size:.55rem; letter-spacing:.18em; text-transform:uppercase; background:var(--gold); color:var(--charcoal); padding:.35rem .8rem; z-index:2; }
+    .prop-card-badge.reduced { background:var(--charcoal); color:var(--white); }
+    .prop-card-badge.soon { background:var(--ink); color:rgba(255,255,255,.7); }
+    .prop-card-overlay { position:absolute; inset:0; background:linear-gradient(to top,rgba(28,28,28,.6) 0%,transparent 50%); opacity:0; transition:opacity .4s; }
+    .prop-card:hover .prop-card-overlay { opacity:1; }
+    .prop-card-hover-cta { position:absolute; bottom:1.5rem; left:1.5rem; opacity:0; transform:translateY(6px); transition:opacity .35s,transform .35s cubic-bezier(.22,1,.36,1); font-size:.62rem; letter-spacing:.22em; text-transform:uppercase; color:var(--white); border-bottom:1px solid rgba(255,255,255,.4); padding-bottom:.15rem; }
+    .prop-card:hover .prop-card-hover-cta { opacity:1; transform:translateY(0); }
+
+    .prop-card-body { padding:1.8rem 1.8rem 2rem; border-bottom:1px solid var(--warm); }
+    .prop-card-location { font-size:.6rem; letter-spacing:.28em; text-transform:uppercase; color:var(--gold); margin-bottom:.5rem; }
+    .prop-card-name { font-family:'Cormorant Garamond',serif; font-size:1.6rem; font-weight:400; color:var(--ink); line-height:1.05; margin-bottom:.5rem; }
+    .prop-card-price { font-family:'Cormorant Garamond',serif; font-size:1.2rem; color:var(--ink); font-weight:400; }
+    .prop-card-specs { display:flex; gap:1.5rem; padding:1.1rem 1.8rem; background:var(--cream); }
+    .spec { display:flex; align-items:center; gap:.45rem; font-size:.68rem; letter-spacing:.06em; color:var(--muted); }
+    .spec svg { color:var(--gold-lt); flex-shrink:0; }
+    .prop-type-tag { position:absolute; top:1.2rem; left:1.2rem; font-size:.55rem; letter-spacing:.14em; text-transform:uppercase; background:rgba(246,243,238,.92); color:var(--ink); padding:.35rem .8rem; z-index:2; backdrop-filter:blur(4px); }
+
+    /* LIST VIEW card */
+    .listings-grid.list-view .prop-card { display:grid; grid-template-columns:360px 1fr; }
+    .listings-grid.list-view .prop-card-img-wrap { height:220px; }
+    .listings-grid.list-view .prop-card-content { display:flex; flex-direction:column; }
+    .listings-grid.list-view .prop-card-body { flex:1; border-bottom:none; border-right:none; }
+    .listings-grid.list-view .prop-card-specs { margin-top:auto; background:transparent; border-top:1px solid var(--warm); }
+
+    /* NO RESULTS */
+    .no-results {
+      grid-column:1/-1; text-align:center; padding:7rem 2rem;
+    }
+    .no-results-icon { width:64px; height:64px; border:1px solid var(--warm); border-radius:50%; display:grid; place-items:center; margin:0 auto 2rem; color:var(--gold-lt); }
+    .no-results h3 { font-family:'Cormorant Garamond',serif; font-size:2rem; font-weight:300; color:var(--ink); margin-bottom:.8rem; }
+    .no-results p { font-size:.85rem; color:var(--muted); margin-bottom:2rem; }
+    .btn-reset { padding:.9rem 2.4rem; background:var(--charcoal); color:var(--white); border:none; cursor:none; font-family:'Jost',sans-serif; font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; transition:background .25s; }
+    .btn-reset:hover { background:var(--gold); color:var(--charcoal); }
+
+    /* FOOTER */
+    footer { background:var(--charcoal); border-top:1px solid rgba(184,155,106,.18); padding:5rem 4rem 3rem; }
+    .footer-top { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:4rem; max-width:1320px; margin:0 auto 4rem; }
+    .footer-brand-name { font-family:'Cormorant Garamond',serif; font-weight:300; font-size:2rem; letter-spacing:.2em; text-transform:uppercase; color:var(--white); margin-bottom:1.2rem; text-decoration:none; display:inline-block; }
+    .footer-tagline { font-size:.8rem; line-height:1.8; color:rgba(255,255,255,.4); max-width:280px; margin-bottom:2rem; }
+    .footer-social { display:flex; gap:.8rem; flex-wrap:wrap; }
+    .social-link { width:38px; height:38px; border:1px solid rgba(255,255,255,.15); display:grid; place-items:center; color:rgba(255,255,255,.4); text-decoration:none; transition:border-color .3s,color .3s; cursor:none; }
+    .social-link:hover { border-color:var(--gold); color:var(--gold); }
+    .footer-col-title { font-size:.62rem; letter-spacing:.25em; text-transform:uppercase; color:var(--gold); margin-bottom:1.5rem; }
+    .footer-links { list-style:none; }
+    .footer-links li { margin-bottom:.75rem; }
+    .footer-links a { font-size:.82rem; color:rgba(255,255,255,.4); text-decoration:none; transition:color .3s; cursor:none; }
+    .footer-links a:hover { color:rgba(255,255,255,.85); }
+    .footer-bottom { max-width:1320px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; border-top:1px solid rgba(255,255,255,.06); padding-top:2rem; flex-wrap:wrap; gap:1rem; }
+    .footer-bottom-links { display:flex; gap:2rem; }
+    .footer-bottom-link { font-size:.68rem; letter-spacing:.1em; color:rgba(255,255,255,.3); text-decoration:none; transition:color .3s; cursor:none; }
+    .footer-bottom-link:hover { color:rgba(255,255,255,.7); }
+    .footer-copy { font-size:.68rem; letter-spacing:.1em; color:rgba(255,255,255,.25); }
+
+    /* Animate in */
+    @keyframes cardIn {
+      from { opacity:0; transform:translateY(16px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    .prop-card { animation:cardIn .5s cubic-bezier(.22,1,.36,1) both; }
+
+    /* Loading shimmer */
+    .shimmer { background:linear-gradient(90deg,var(--warm) 25%,var(--cream) 50%,var(--warm) 75%); background-size:400% 100%; animation:shimmer 1.4s infinite; }
+    @keyframes shimmer { from { background-position:100% 0; } to { background-position:-100% 0; } }
+  
+    /* ━━━ MOBILE HAMBURGER ━━━ */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 36px; height: 36px;
+      background: none; border: none; cursor: pointer;
+      padding: 4px; z-index: 200;
+    }
+    .nav-hamburger span {
+      display: block; width: 100%; height: 1px;
+      background: currentColor;
+      transition: transform .35s cubic-bezier(.22,1,.36,1), opacity .25s ease, width .3s ease;
+      transform-origin: center;
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; width: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+    .nav-mobile-overlay {
+      display: none;
+      position: fixed; inset: 0; z-index: 150;
+      background: rgba(28,28,28,.97);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2.4rem;
+      opacity: 0;
+      transition: opacity .4s cubic-bezier(.22,1,.36,1);
+      pointer-events: none;
+    }
+    .nav-mobile-overlay.visible {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .nav-mobile-overlay a {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 7vw, 3rem);
+      font-weight: 300;
+      letter-spacing: .12em;
+      color: rgba(255,255,255,.7);
+      text-decoration: none;
+      transition: color .3s;
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity .4s ease, transform .4s cubic-bezier(.22,1,.36,1), color .3s;
+    }
+    .nav-mobile-overlay.visible a {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .nav-mobile-overlay.visible a:nth-child(1) { transition-delay: .08s; }
+    .nav-mobile-overlay.visible a:nth-child(2) { transition-delay: .14s; }
+    .nav-mobile-overlay.visible a:nth-child(3) { transition-delay: .20s; }
+    .nav-mobile-overlay.visible a:nth-child(4) { transition-delay: .26s; }
+    .nav-mobile-overlay.visible a:nth-child(5) { transition-delay: .32s; }
+    .nav-mobile-overlay a:hover { color: var(--gold); }
+    .nav-mobile-close {
+      position: absolute; top: 1.8rem; right: 1.8rem;
+      width: 36px; height: 36px;
+      background: none; border: 1px solid rgba(255,255,255,.15);
+      color: rgba(255,255,255,.6);
+      font-size: 1.1rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color .3s, color .3s;
+    }
+    .nav-mobile-close:hover { border-color: var(--gold); color: var(--gold); }
+
+    @media (max-width: 768px) {
+      .nav-hamburger { display: flex; }
+      .nav-links, .nav-cta { display: none !important; }
+    }
+
+    /* ━━━ PAGE TRANSITION OVERLAY ━━━ */
+    #page-transition {
+      position: fixed; inset: 0; z-index: 9000;
+      background: var(--charcoal);
+      pointer-events: none;
+      transform: scaleY(0);
+      transform-origin: bottom;
+    }
+    #page-transition.leave {
+      transform: scaleY(1);
+      transform-origin: bottom;
+      transition: transform .45s cubic-bezier(.76,0,.24,1);
+    }
+    #page-transition.enter {
+      transform: scaleY(0);
+      transform-origin: top;
+      transition: transform .45s cubic-bezier(.76,0,.24,1);
+    }
+
+    /* ━━━ COOKIE BANNER ━━━ */
+    #cookie-banner {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 8000;
+      background: var(--charcoal);
+      border-top: 1px solid rgba(184,155,106,.25);
+      padding: 1.6rem 3rem;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 2rem; flex-wrap: wrap;
+      transform: translateY(100%);
+      transition: transform .55s cubic-bezier(.22,1,.36,1);
+    }
+    #cookie-banner.visible { transform: translateY(0); }
+    .cookie-text {
+      font-size: .8rem; color: rgba(255,255,255,.55);
+      letter-spacing: .03em; line-height: 1.7;
+      max-width: 640px;
+    }
+    .cookie-text a {
+      color: var(--gold); text-decoration: none;
+      border-bottom: 1px solid rgba(184,155,106,.4);
+      transition: color .3s, border-color .3s;
+    }
+    .cookie-text a:hover { color: var(--gold-lt); border-color: var(--gold-lt); }
+    .cookie-actions { display: flex; gap: .9rem; flex-shrink: 0; }
+    .cookie-btn {
+      font-family: 'Jost', sans-serif; font-weight: 300;
+      font-size: .68rem; letter-spacing: .2em; text-transform: uppercase;
+      border: none; padding: .75rem 1.6rem; cursor: pointer;
+      transition: background .3s, transform .2s;
+    }
+    .cookie-btn-accept { background: var(--gold); color: var(--charcoal); }
+    .cookie-btn-accept:hover { background: var(--gold-lt); transform: translateY(-1px); }
+    .cookie-btn-decline { background: transparent; color: rgba(255,255,255,.4); border: 1px solid rgba(255,255,255,.15); }
+    .cookie-btn-decline:hover { border-color: rgba(255,255,255,.4); color: rgba(255,255,255,.7); }
+
+    /* ━━━ COOKIE SETTINGS MODAL ━━━ */
+    #cookie-modal {
+      position: fixed; inset: 0; z-index: 9500;
+      background: rgba(28,28,28,.85); backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity .3s ease;
+    }
+    #cookie-modal.visible { opacity: 1; pointer-events: all; }
+    .cookie-modal-box {
+      background: var(--white); max-width: 560px; width: 90%;
+      padding: 3rem; position: relative;
+      transform: translateY(20px);
+      transition: transform .35s cubic-bezier(.22,1,.36,1);
+    }
+    #cookie-modal.visible .cookie-modal-box { transform: translateY(0); }
+    .cookie-modal-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem; font-weight: 300; color: var(--ink);
+      margin-bottom: 1rem;
+    }
+    .cookie-modal-desc {
+      font-size: .85rem; line-height: 1.75; color: var(--muted);
+      margin-bottom: 2rem;
+    }
+    .cookie-toggle-row {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      padding: 1rem 0; border-bottom: 1px solid var(--warm); gap: 1.5rem;
+    }
+    .cookie-toggle-info h4 {
+      font-family: 'Jost', sans-serif; font-weight: 400;
+      font-size: .82rem; letter-spacing: .06em; color: var(--ink);
+      margin-bottom: .25rem;
+    }
+    .cookie-toggle-info p { font-size: .75rem; color: var(--muted); line-height: 1.6; }
+    .cookie-toggle {
+      position: relative; flex-shrink: 0;
+      width: 40px; height: 22px;
+    }
+    .cookie-toggle input { opacity: 0; width: 0; height: 0; }
+    .cookie-toggle-slider {
+      position: absolute; inset: 0; cursor: pointer;
+      background: var(--warm); transition: background .3s;
+      border-radius: 22px;
+    }
+    .cookie-toggle-slider::before {
+      content: ''; position: absolute;
+      width: 16px; height: 16px; border-radius: 50%;
+      background: white; bottom: 3px; left: 3px;
+      transition: transform .3s;
+    }
+    .cookie-toggle input:checked + .cookie-toggle-slider { background: var(--gold); }
+    .cookie-toggle input:checked + .cookie-toggle-slider::before { transform: translateX(18px); }
+    .cookie-toggle input:disabled + .cookie-toggle-slider { opacity: .5; cursor: default; }
+    .cookie-modal-actions {
+      margin-top: 2rem; display: flex; gap: .8rem; justify-content: flex-end;
+    }
+    .cookie-modal-close {
+      position: absolute; top: 1.2rem; right: 1.2rem;
+      width: 32px; height: 32px; background: none; border: none;
+      cursor: pointer; color: var(--muted); font-size: 1.1rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: color .3s;
+    }
+    .cookie-modal-close:hover { color: var(--ink); }
+
+  </style>
+</head>
+<body>
+
+  <!-- PAGE TRANSITION OVERLAY -->
+  <div id="page-transition"></div>
+
+  <!-- MOBILE NAV OVERLAY -->
+  <div class="nav-mobile-overlay" id="mobileOverlay">
+    <button class="nav-mobile-close" id="mobileClose" aria-label="Close menu">✕</button>
+    <a href="index.html">Home</a>
+    <a href="properties.html">Properties</a>
+    <a href="index.html#neighbourhoods">Neighbourhoods</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </div>
+
+  <!-- COOKIE BANNER -->
+  <div id="cookie-banner" role="region" aria-label="Cookie consent">
+    <p class="cookie-text">
+      We use cookies to enhance your experience and analyse site traffic.
+      By clicking <strong style="color:rgba(255,255,255,.75)">Accept</strong>, you agree to our use of cookies.
+      <a href="#" class="cookie-settings-trigger">Cookie Settings</a> ·
+      <a href="#">Privacy Policy</a>
+    </p>
+    <div class="cookie-actions">
+      <button class="cookie-btn cookie-btn-decline" id="cookieDecline">Decline</button>
+      <button class="cookie-btn cookie-btn-accept" id="cookieAccept">Accept All</button>
+    </div>
+  </div>
+
+  <!-- COOKIE SETTINGS MODAL -->
+  <div id="cookie-modal" role="dialog" aria-modal="true" aria-labelledby="cookieModalTitle">
+    <div class="cookie-modal-box">
+      <button class="cookie-modal-close" id="cookieModalClose" aria-label="Close">✕</button>
+      <h2 class="cookie-modal-title" id="cookieModalTitle">Cookie Preferences</h2>
+      <p class="cookie-modal-desc">Manage your cookie preferences below. Essential cookies are always enabled as they are necessary for the website to function.</p>
+      <div class="cookie-toggle-row">
+        <div class="cookie-toggle-info">
+          <h4>Essential Cookies</h4>
+          <p>Required for basic site functionality. Cannot be disabled.</p>
+        </div>
+        <label class="cookie-toggle"><input type="checkbox" checked disabled><span class="cookie-toggle-slider"></span></label>
+      </div>
+      <div class="cookie-toggle-row">
+        <div class="cookie-toggle-info">
+          <h4>Analytics Cookies</h4>
+          <p>Help us understand how visitors interact with our site.</p>
+        </div>
+        <label class="cookie-toggle"><input type="checkbox" id="analyticsToggle"><span class="cookie-toggle-slider"></span></label>
+      </div>
+      <div class="cookie-toggle-row">
+        <div class="cookie-toggle-info">
+          <h4>Marketing Cookies</h4>
+          <p>Used to deliver relevant advertising and track campaign effectiveness.</p>
+        </div>
+        <label class="cookie-toggle"><input type="checkbox" id="marketingToggle"><span class="cookie-toggle-slider"></span></label>
+      </div>
+      <div class="cookie-modal-actions">
+        <button class="cookie-btn cookie-btn-decline" id="cookieSavePrefs">Save Preferences</button>
+        <button class="cookie-btn cookie-btn-accept" id="cookieAcceptAll">Accept All</button>
+      </div>
+    </div>
+  </div>
+
+<!-- CURSOR -->
+<div class="cursor"><div class="cursor-dot"></div></div>
+<div class="cursor-ring"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">Maison</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="properties.html" class="active">Properties</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <a href="contact.html" class="nav-cta">Speak with an Advisor</a>
+    <button class="nav-hamburger" id="navHamburger" aria-label="Open menu" style="color:var(--ink)"><span></span><span></span><span></span></button>
+  </nav>
+
+<!-- PAGE HEADER -->
+<header class="page-header">
+  <div class="page-header-inner">
+    <p class="page-eyebrow reveal">Our Collection</p>
+    <h1 class="page-title reveal">Exceptional <em>Residences</em></h1>
+    <p class="page-subtitle reveal">Each property in our portfolio represents the finest of its kind — curated with the discernment our clients deserve.</p>
+  </div>
+</header>
+
+<!-- SEARCH & FILTER BAR -->
+<div class="search-bar-wrap">
+  <div class="search-bar-inner">
+
+    <!-- Location / keyword search -->
+    <div class="search-input-wrap">
+      <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input class="search-input" id="searchInput" type="text" placeholder="Search by name or location…" autocomplete="off" />
+    </div>
+
+    <!-- Price filter -->
+    <div class="filter-item" id="priceFilter">
+      <button class="filter-btn" id="priceTrigger" onclick="toggleDropdown('priceDropdown','priceTrigger')">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        <span id="priceBtnLabel">Price</span>
+        <svg width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg>
+      </button>
+      <div class="filter-dropdown" id="priceDropdown">
+        <div class="dropdown-inner">
+          <span class="dropdown-label">Price Range</span>
+          <div class="range-wrap">
+            <div class="range-row">
+              <input class="range-input-box" id="priceMin" type="text" placeholder="No min" />
+              <span class="range-sep">—</span>
+              <input class="range-input-box" id="priceMax" type="text" placeholder="No max" />
+            </div>
+            <p style="font-size:.68rem;color:var(--muted);margin-top:.2rem">Enter amounts in listing currency (e.g. 5000000)</p>
+          </div>
+          <div style="margin-top:1rem">
+            <span class="dropdown-label">Quick select</span>
+            <div class="check-options" id="pricePresets">
+              <label class="check-opt"><input type="radio" name="pricePreset" value="" /><span class="check-box"></span><span class="check-label">Any price</span></label>
+              <label class="check-opt"><input type="radio" name="pricePreset" value="0-5000000" /><span class="check-box"></span><span class="check-label">Under 5M</span></label>
+              <label class="check-opt"><input type="radio" name="pricePreset" value="5000000-10000000" /><span class="check-box"></span><span class="check-label">5M – 10M</span></label>
+              <label class="check-opt"><input type="radio" name="pricePreset" value="10000000-999999999" /><span class="check-box"></span><span class="check-label">10M+</span></label>
+            </div>
+          </div>
+        </div>
+        <div class="dropdown-actions">
+          <button class="btn-clear-filter" onclick="clearFilter('price')">Clear</button>
+          <button class="btn-apply" onclick="applyFilters(); closeDropdown('priceDropdown','priceTrigger')">Apply</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Location filter -->
+    <div class="filter-item" id="locationFilter">
+      <button class="filter-btn" id="locationTrigger" onclick="toggleDropdown('locationDropdown','locationTrigger')">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <span id="locationBtnLabel">Location</span>
+        <svg width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg>
+      </button>
+      <div class="filter-dropdown" id="locationDropdown">
+        <div class="dropdown-inner">
+          <span class="dropdown-label">Destination</span>
+          <div class="check-options" id="locationOptions"></div>
+        </div>
+        <div class="dropdown-actions">
+          <button class="btn-clear-filter" onclick="clearFilter('location')">Clear</button>
+          <button class="btn-apply" onclick="applyFilters(); closeDropdown('locationDropdown','locationTrigger')">Apply</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Beds filter -->
+    <div class="filter-item" id="bedsFilter">
+      <button class="filter-btn" id="bedsTrigger" onclick="toggleDropdown('bedsDropdown','bedsTrigger')">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 20v-8a2 2 0 012-2h16a2 2 0 012 2v8"/><path d="M2 14V8a2 2 0 012-2h3v8"/><path d="M22 14V8a2 2 0 00-2-2h-3v8"/></svg>
+        <span id="bedsBtnLabel">Beds</span>
+        <svg width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg>
+      </button>
+      <div class="filter-dropdown" id="bedsDropdown">
+        <div class="dropdown-inner">
+          <span class="dropdown-label">Bedrooms</span>
+          <div class="beds-pills" id="bedsPills">
+            <button class="beds-pill active" data-beds="">Any</button>
+            <button class="beds-pill" data-beds="1">1+</button>
+            <button class="beds-pill" data-beds="2">2+</button>
+            <button class="beds-pill" data-beds="3">3+</button>
+            <button class="beds-pill" data-beds="4">4+</button>
+            <button class="beds-pill" data-beds="5">5+</button>
+            <button class="beds-pill" data-beds="6">6+</button>
+          </div>
+        </div>
+        <div class="dropdown-actions">
+          <button class="btn-clear-filter" onclick="clearFilter('beds')">Clear</button>
+          <button class="btn-apply" onclick="applyFilters(); closeDropdown('bedsDropdown','bedsTrigger')">Apply</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Type filter -->
+    <div class="filter-item" id="typeFilter">
+      <button class="filter-btn" id="typeTrigger" onclick="toggleDropdown('typeDropdown','typeTrigger')">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span id="typeBtnLabel">Type</span>
+        <svg width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg>
+      </button>
+      <div class="filter-dropdown" id="typeDropdown">
+        <div class="dropdown-inner">
+          <span class="dropdown-label">Property Type</span>
+          <div class="check-options">
+            <label class="check-opt"><input type="checkbox" value="Villa" data-group="type" /><span class="check-box"></span><span class="check-label">Villa</span></label>
+            <label class="check-opt"><input type="checkbox" value="Townhouse" data-group="type" /><span class="check-box"></span><span class="check-label">Townhouse</span></label>
+            <label class="check-opt"><input type="checkbox" value="Penthouse" data-group="type" /><span class="check-box"></span><span class="check-label">Penthouse</span></label>
+            <label class="check-opt"><input type="checkbox" value="Estate" data-group="type" /><span class="check-box"></span><span class="check-label">Estate</span></label>
+            <label class="check-opt"><input type="checkbox" value="Apartment" data-group="type" /><span class="check-box"></span><span class="check-label">Apartment</span></label>
+            <label class="check-opt"><input type="checkbox" value="Residence" data-group="type" /><span class="check-box"></span><span class="check-label">Residence</span></label>
+            <label class="check-opt"><input type="checkbox" value="Retreat" data-group="type" /><span class="check-box"></span><span class="check-label">Retreat</span></label>
+          </div>
+        </div>
+        <div class="dropdown-actions">
+          <button class="btn-clear-filter" onclick="clearFilter('type')">Clear</button>
+          <button class="btn-apply" onclick="applyFilters(); closeDropdown('typeDropdown','typeTrigger')">Apply</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <button class="search-submit" onclick="applyFilters()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+      Search
+    </button>
+
+  </div>
+</div>
+
+<!-- RESULTS BAR -->
+<div class="results-bar">
+  <div style="display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;">
+    <p class="results-count"><strong id="resultsCount">0</strong> <span id="resultsLabel">properties found</span></p>
+    <div class="active-filters" id="activeFilters"></div>
+  </div>
+  <div style="display:flex;align-items:center;gap:1.5rem;">
+    <div class="sort-wrap">
+      <span class="sort-label">Sort</span>
+      <select class="sort-select" id="sortSelect" onchange="applyFilters()">
+        <option value="default">Featured</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+        <option value="beds-desc">Most Bedrooms</option>
+        <option value="name-asc">Name A–Z</option>
+      </select>
+    </div>
+    <div class="view-toggle">
+      <button class="view-btn active" id="gridViewBtn" onclick="setView('grid')" title="Grid view">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      </button>
+      <button class="view-btn" id="listViewBtn" onclick="setView('list')" title="List view">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- LISTINGS GRID -->
+<section class="listings-section">
+  <div class="listings-inner">
+    <div class="listings-grid" id="listingsGrid"></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <a href="index.html" class="footer-brand-name">Maison</a>
+      <p class="footer-tagline">Connecting extraordinary people with the finest homes in the world's most coveted addresses since 1994.</p>
+      <div class="footer-social">
+        <a href="#" class="social-link" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+        <a href="#" class="social-link" aria-label="LinkedIn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+        <a href="#" class="social-link" aria-label="X"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      </div>
+    </div>
+    <div>
+      <p class="footer-col-title">Properties</p>
+      <ul class="footer-links">
+        <li><a href="properties.html">For Sale</a></li>
+        <li><a href="properties.html">New Developments</a></li>
+        <li><a href="properties.html">Off Market</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-title">Company</p>
+      <ul class="footer-links">
+        <li><a href="about.html">Our Story</a></li>
+        <li><a href="about.html">Advisors</a></li>
+        <li><a href="contact.html">Careers</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-title">Contact</p>
+      <ul class="footer-links">
+        <li><a href="contact.html">London HQ</a></li>
+        <li><a href="contact.html">New York Office</a></li>
+        <li><a href="contact.html">Paris Atelier</a></li>
+        <li><a href="mailto:hello@maison.com">hello@maison.com</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2026 Maison. All rights reserved.</p>
+    <div class="footer-bottom-links">
+      <a href="#" class="footer-bottom-link">Privacy Policy</a>
+      <a href="#" class="footer-bottom-link">Terms of Use</a>
+    </div>
+    <p class="footer-copy">Member of the Luxury Real Estate Network</p>
+  </div>
+</footer>
+
+<script>
+// ── CURSOR ──
+const dot = document.querySelector('.cursor-dot');
+const ring = document.querySelector('.cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+(function tick(){dot.style.left=mx+'px';dot.style.top=my+'px';rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(tick);})();
+
+// ── REVEAL ──
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e=>{ if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target);} });
+},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+// ── SUPABASE CONFIG ──
+const SUPA_URL = 'https://xqucpjnjbwohppvorcox.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhxdWNwam5qYndvaHBwdm9yY294Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NTI4OTksImV4cCI6MjA4ODEyODg5OX0.DP38R5szFsITEQIlr1u4OCF3pJzDYbrZjdT4Cz3bAoM';
+
+// Normalise Supabase row → legacy shape used by render/filter
+function normalise(l) {
+  return {
+    id: l.id,
+    name: l.title,
+    type: l.property_type ? (l.property_type.charAt(0).toUpperCase()+l.property_type.slice(1)) : '',
+    location: l.location,
+    priceRaw: parseFloat(l.price)||0,
+    price: l.price_display || String(l.price),
+    badge: l.badge||'',
+    beds: l.bedrooms||0,
+    baths: l.bathrooms||0,
+    area: l.square_meters ? l.square_meters+'m²' : '',
+    imgs: l.images||[],
+  };
+}
+
+let ALL_LISTINGS = [];
+
+async function loadAllListings() {
+  const res = await fetch(SUPA_URL+'/rest/v1/properties?select=*&order=sort_order.asc', {
+    headers:{ 'apikey': SUPA_KEY, 'Authorization': 'Bearer '+SUPA_KEY }
+  });
+  const data = await res.json();
+  ALL_LISTINGS = Array.isArray(data) ? data.map(normalise) : [];
+  return ALL_LISTINGS;
+}
+
+function getAllListings() { return ALL_LISTINGS; }
+function enrichListings(listings) { return listings; }
+
+// ── FILTER STATE ──
+let filters = { search:'', priceMin:'', priceMax:'', locations:[], beds:'', types:[] };
+let currentView = 'grid';
+
+// ── UNIQUE LOCATIONS for dynamic checkboxes ──
+function buildLocationOptions() {
+  const all = getAllListings();
+  const locs = [...new Set(all.map(l=>l.location).filter(Boolean))].sort();
+  const container = document.getElementById('locationOptions');
+  container.innerHTML = locs.map(loc=>`
+    <label class="check-opt">
+      <input type="checkbox" value="${loc}" data-group="location" />
+      <span class="check-box"></span>
+      <span class="check-label">${loc}</span>
+      <span class="check-sub">${all.filter(l=>l.location===loc).length}</span>
+    </label>`).join('');
+}
+
+// ── INIT: load from Supabase then boot ──
+loadAllListings().then(()=>{
+  buildLocationOptions();
+  applyFilters();
+}).catch(()=>{
+  document.getElementById('listingsGrid').innerHTML='<div class="no-results"><h3>Unable to load listings</h3><p>Please refresh the page.</p></div>';
+});
+
+// ── BEDS PILLS ──
+document.querySelectorAll('#bedsPills .beds-pill').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('#bedsPills .beds-pill').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    filters.beds = btn.dataset.beds;
+  });
+});
+
+// ── PRICE PRESETS ──
+document.querySelectorAll('[name="pricePreset"]').forEach(radio=>{
+  radio.addEventListener('change',()=>{
+    const val = radio.value;
+    if (!val) { document.getElementById('priceMin').value=''; document.getElementById('priceMax').value=''; }
+    else {
+      const [mn,mx] = val.split('-');
+      document.getElementById('priceMin').value = mn;
+      document.getElementById('priceMax').value = mx==='999999999'?'':mx;
+    }
+  });
+});
+
+// ── DROPDOWN LOGIC ──
+function toggleDropdown(id, triggerId) {
+  const dd = document.getElementById(id);
+  const tr = document.getElementById(triggerId);
+  const isOpen = dd.classList.contains('open');
+  // close all
+  document.querySelectorAll('.filter-dropdown').forEach(d=>d.classList.remove('open'));
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('open'));
+  if (!isOpen) { dd.classList.add('open'); tr.classList.add('open'); }
+}
+function closeDropdown(id, triggerId) {
+  document.getElementById(id).classList.remove('open');
+  document.getElementById(triggerId).classList.remove('open');
+}
+document.addEventListener('click',e=>{
+  if (!e.target.closest('.filter-item')) {
+    document.querySelectorAll('.filter-dropdown').forEach(d=>d.classList.remove('open'));
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('open'));
+  }
+});
+
+// ── CLEAR INDIVIDUAL FILTERS ──
+function clearFilter(type) {
+  if (type==='price') {
+    filters.priceMin=''; filters.priceMax='';
+    document.getElementById('priceMin').value='';
+    document.getElementById('priceMax').value='';
+    document.querySelectorAll('[name="pricePreset"]').forEach(r=>r.checked=false);
+    document.querySelector('[name="pricePreset"][value=""]').checked=true;
+  }
+  if (type==='location') {
+    filters.locations=[];
+    document.querySelectorAll('[data-group="location"]').forEach(c=>c.checked=false);
+  }
+  if (type==='beds') {
+    filters.beds='';
+    document.querySelectorAll('#bedsPills .beds-pill').forEach(b=>b.classList.remove('active'));
+    document.querySelector('#bedsPills .beds-pill[data-beds=""]').classList.add('active');
+  }
+  if (type==='type') {
+    filters.types=[];
+    document.querySelectorAll('[data-group="type"]').forEach(c=>c.checked=false);
+  }
+  applyFilters();
+}
+
+function clearAllFilters() {
+  filters = {search:'',priceMin:'',priceMax:'',locations:[],beds:'',types:[]};
+  document.getElementById('searchInput').value='';
+  document.getElementById('priceMin').value='';
+  document.getElementById('priceMax').value='';
+  document.querySelectorAll('[name="pricePreset"]').forEach(r=>r.checked=false);
+  document.querySelector('[name="pricePreset"][value=""]').checked=true;
+  document.querySelectorAll('[data-group="location"]').forEach(c=>c.checked=false);
+  document.querySelectorAll('[data-group="type"]').forEach(c=>c.checked=false);
+  document.querySelectorAll('#bedsPills .beds-pill').forEach(b=>b.classList.remove('active'));
+  document.querySelector('#bedsPills .beds-pill[data-beds=""]').classList.add('active');
+  document.getElementById('sortSelect').value='default';
+  applyFilters();
+}
+
+// ── APPLY FILTERS ──
+function applyFilters() {
+  // Read current UI state
+  filters.search = document.getElementById('searchInput').value.toLowerCase().trim();
+  filters.priceMin = document.getElementById('priceMin').value.replace(/[^0-9]/g,'');
+  filters.priceMax = document.getElementById('priceMax').value.replace(/[^0-9]/g,'');
+  filters.locations = [...document.querySelectorAll('[data-group="location"]:checked')].map(c=>c.value);
+  filters.types = [...document.querySelectorAll('[data-group="type"]:checked')].map(c=>c.value);
+  // beds already updated by pill clicks
+
+  let all = getAllListings();
+
+  // Filter
+  let results = all.filter(l=>{
+    if (filters.search) {
+      const hay = (l.name+' '+l.location+' '+l.type).toLowerCase();
+      if (!hay.includes(filters.search)) return false;
+    }
+    if (filters.priceMin && l.priceRaw < parseInt(filters.priceMin)) return false;
+    if (filters.priceMax && l.priceRaw > parseInt(filters.priceMax)) return false;
+    if (filters.locations.length && !filters.locations.includes(l.location)) return false;
+    if (filters.beds && l.beds < parseInt(filters.beds)) return false;
+    if (filters.types.length && !filters.types.includes(l.type)) return false;
+    return true;
+  });
+
+  // Sort
+  const sort = document.getElementById('sortSelect').value;
+  if (sort==='price-asc') results.sort((a,b)=>a.priceRaw-b.priceRaw);
+  else if (sort==='price-desc') results.sort((a,b)=>b.priceRaw-a.priceRaw);
+  else if (sort==='beds-desc') results.sort((a,b)=>(b.beds||0)-(a.beds||0));
+  else if (sort==='name-asc') results.sort((a,b)=>a.name.localeCompare(b.name));
+
+  renderResults(results);
+  updateActiveTags();
+  updateBtnLabels();
+}
+
+// ── RENDER ──
+function renderResults(results) {
+  const grid = document.getElementById('listingsGrid');
+  const count = document.getElementById('resultsCount');
+  const label = document.getElementById('resultsLabel');
+
+  count.textContent = results.length;
+  label.textContent = results.length===1?'property found':'properties found';
+
+  if (!results.length) {
+    grid.innerHTML = `
+      <div class="no-results">
+        <div class="no-results-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/><path d="M8 11h6M11 8v6" opacity=".4"/></svg>
+        </div>
+        <h3>No properties found</h3>
+        <p>Try adjusting your filters or search terms to discover more residences.</p>
+        <button class="btn-reset" onclick="clearAllFilters()">Clear all filters</button>
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = results.map((l,i) => {
+    const img = (l.imgs&&l.imgs[0])||'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=900&q=80';
+    const badgeCls = l.badge==='Reduced'?'reduced':l.badge&&l.badge.toLowerCase().includes('soon')?'soon':'';
+    return `
+    <div class="prop-card" style="animation-delay:${i*0.06}s" onclick="location.href='property.html?id=${l.id}'">
+      <div class="prop-card-img-wrap">
+        <img class="prop-card-img" src="${esc(img)}" alt="${esc(l.name)}" loading="lazy" />
+        <div class="prop-card-overlay"></div>
+        ${l.type?`<div class="prop-type-tag">${esc(l.type)}</div>`:''}
+        ${l.badge?`<div class="prop-card-badge ${badgeCls}">${esc(l.badge)}</div>`:''}
+        <span class="prop-card-hover-cta">View property →</span>
+      </div>
+      <div class="prop-card-content">
+        <div class="prop-card-body">
+          <p class="prop-card-location">${esc(l.location)}</p>
+          <h3 class="prop-card-name">${esc(l.name)}</h3>
+          <p class="prop-card-price">${esc(l.price)}</p>
+        </div>
+        <div class="prop-card-specs">
+          ${l.beds?`<div class="spec"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 20v-8a2 2 0 012-2h16a2 2 0 012 2v8"/><path d="M2 14V8a2 2 0 012-2h3v8"/><path d="M22 14V8a2 2 0 00-2-2h-3v8"/></svg>${l.beds} beds</div>`:''}
+          ${l.baths?`<div class="spec"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 12h16"/><path d="M4 12V6a2 2 0 012-2h4a2 2 0 012 2v6"/><path d="M4 12v5a3 3 0 006 0"/><circle cx="8" cy="8" r="1" fill="currentColor"/></svg>${l.baths} baths</div>`:''}
+          ${l.area?`<div class="spec"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 9h18M9 21V9"/></svg>${esc(l.area)}</div>`:''}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function esc(s) {
+  if (s==null) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── ACTIVE FILTER TAGS ──
+function updateActiveTags() {
+  const container = document.getElementById('activeFilters');
+  const tags = [];
+
+  if (filters.search) tags.push({label:`"${filters.search}"`, key:'search'});
+  if (filters.priceMin||filters.priceMax) {
+    const mn = filters.priceMin?parseInt(filters.priceMin).toLocaleString():'';
+    const mx = filters.priceMax?parseInt(filters.priceMax).toLocaleString():'';
+    const label = mn&&mx?`${mn} – ${mx}`:mn?`Min ${mn}`:mx?`Max ${mx}`:'';
+    if(label) tags.push({label:`Price: ${label}`, key:'price'});
+  }
+  filters.locations.forEach(l=>tags.push({label:l,key:'location:'+l}));
+  if (filters.beds) tags.push({label:`${filters.beds}+ beds`,key:'beds'});
+  filters.types.forEach(t=>tags.push({label:t,key:'type:'+t}));
+
+  container.innerHTML = tags.map(t=>`
+    <div class="filter-tag">
+      ${esc(t.label)}
+      <button class="filter-tag-remove" onclick="removeTag('${t.key}')" title="Remove filter">×</button>
+    </div>`).join('');
+
+  if (tags.length>1) {
+    container.innerHTML += `<button class="clear-all-btn" onclick="clearAllFilters()">Clear all</button>`;
+  }
+}
+
+function removeTag(key) {
+  if (key==='search') { filters.search=''; document.getElementById('searchInput').value=''; }
+  else if (key==='price') clearFilter('price');
+  else if (key==='beds') clearFilter('beds');
+  else if (key.startsWith('location:')) {
+    const loc = key.slice(9);
+    filters.locations = filters.locations.filter(l=>l!==loc);
+    document.querySelectorAll('[data-group="location"]').forEach(c=>{ if(c.value===loc) c.checked=false; });
+  }
+  else if (key.startsWith('type:')) {
+    const typ = key.slice(5);
+    filters.types = filters.types.filter(t=>t!==typ);
+    document.querySelectorAll('[data-group="type"]').forEach(c=>{ if(c.value===typ) c.checked=false; });
+  }
+  applyFilters();
+}
+
+// ── BUTTON LABEL UPDATES ──
+function updateBtnLabels() {
+  const pBtn = document.getElementById('priceBtnLabel');
+  if (filters.priceMin||filters.priceMax) { pBtn.textContent='Price ✓'; document.getElementById('priceTrigger').classList.add('has-value'); }
+  else { pBtn.textContent='Price'; document.getElementById('priceTrigger').classList.remove('has-value'); }
+
+  const lBtn = document.getElementById('locationBtnLabel');
+  if (filters.locations.length) { lBtn.textContent=`Location (${filters.locations.length})`; document.getElementById('locationTrigger').classList.add('has-value'); }
+  else { lBtn.textContent='Location'; document.getElementById('locationTrigger').classList.remove('has-value'); }
+
+  const bBtn = document.getElementById('bedsBtnLabel');
+  if (filters.beds) { bBtn.textContent=`${filters.beds}+ Beds`; document.getElementById('bedsTrigger').classList.add('has-value'); }
+  else { bBtn.textContent='Beds'; document.getElementById('bedsTrigger').classList.remove('has-value'); }
+
+  const tBtn = document.getElementById('typeBtnLabel');
+  if (filters.types.length) { tBtn.textContent=`Type (${filters.types.length})`; document.getElementById('typeTrigger').classList.add('has-value'); }
+  else { tBtn.textContent='Type'; document.getElementById('typeTrigger').classList.remove('has-value'); }
+}
+
+// ── VIEW TOGGLE ──
+function setView(v) {
+  currentView = v;
+  const grid = document.getElementById('listingsGrid');
+  grid.classList.toggle('list-view', v==='list');
+  document.getElementById('gridViewBtn').classList.toggle('active',v==='grid');
+  document.getElementById('listViewBtn').classList.toggle('active',v==='list');
+}
+
+// ── LIVE SEARCH on typing ──
+document.getElementById('searchInput').addEventListener('input', ()=>applyFilters());
+
+// ── HANDLE URL PARAMS (pre-filter from other pages) ──
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('location')) {
+    const loc = decodeURIComponent(params.get('location'));
+    filters.locations = [loc];
+  }
+  if (params.get('type')) {
+    filters.types = [decodeURIComponent(params.get('type'))];
+  }
+})();
+
+// ── INIT ──
+applyFilters();
+</script>
+  <script>
+
+    // ━━━ PAGE TRANSITIONS ━━━
+    (function() {
+      var overlay = document.getElementById('page-transition');
+      // Enter animation on load
+      overlay.classList.add('enter');
+      setTimeout(function() { overlay.classList.remove('enter'); }, 10);
+
+      // Leave animation on internal link click
+      document.querySelectorAll('a[href]').forEach(function(link) {
+        var href = link.getAttribute('href');
+        if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto') || href.startsWith('tel')) return;
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          var dest = this.getAttribute('href');
+          overlay.classList.add('leave');
+          setTimeout(function() { window.location.href = dest; }, 460);
+        });
+      });
+    })();
+
+    // ━━━ HAMBURGER MENU ━━━
+    (function() {
+      var burger = document.getElementById('navHamburger');
+      var overlay = document.getElementById('mobileOverlay');
+      var closeBtn = document.getElementById('mobileClose');
+      if (!burger || !overlay) return;
+
+      function openMenu() {
+        overlay.style.display = 'flex';
+        requestAnimationFrame(function() { overlay.classList.add('visible'); });
+        burger.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeMenu() {
+        overlay.classList.remove('visible');
+        burger.classList.remove('open');
+        document.body.style.overflow = '';
+        setTimeout(function() {
+          if (!overlay.classList.contains('visible')) overlay.style.display = 'none';
+        }, 420);
+      }
+      burger.addEventListener('click', function() {
+        if (overlay.classList.contains('visible')) closeMenu(); else openMenu();
+      });
+      if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+      // Close on link click
+      overlay.querySelectorAll('a').forEach(function(a) {
+        a.addEventListener('click', function() { closeMenu(); });
+      });
+    })();
+
+    // ━━━ COOKIE CONSENT ━━━
+    (function() {
+      var banner = document.getElementById('cookie-banner');
+      var modal  = document.getElementById('cookie-modal');
+      var COOKIE_KEY = 'maison_cookie_consent';
+
+      function getConsent() {
+        try { return JSON.parse(localStorage.getItem(COOKIE_KEY)); } catch(e) { return null; }
+      }
+      function saveConsent(val) {
+        try { localStorage.setItem(COOKIE_KEY, JSON.stringify(val)); } catch(e) {}
+      }
+      function hideBanner() {
+        banner.classList.remove('visible');
+        setTimeout(function() { banner.style.display = 'none'; }, 600);
+      }
+      function showModal() {
+        modal.style.display = 'flex';
+        requestAnimationFrame(function() { modal.classList.add('visible'); });
+        var consent = getConsent() || {};
+        var aT = document.getElementById('analyticsToggle');
+        var mT = document.getElementById('marketingToggle');
+        if (aT) aT.checked = !!consent.analytics;
+        if (mT) mT.checked = !!consent.marketing;
+      }
+      function hideModal() {
+        modal.classList.remove('visible');
+        setTimeout(function() { if (!modal.classList.contains('visible')) modal.style.display = 'none'; }, 350);
+      }
+
+      // Show banner after delay if no consent saved
+      if (!getConsent()) {
+        setTimeout(function() {
+          banner.style.display = 'flex';
+          requestAnimationFrame(function() { banner.classList.add('visible'); });
+        }, 1800);
+      }
+
+      var accept = document.getElementById('cookieAccept');
+      var decline = document.getElementById('cookieDecline');
+      var acceptAll = document.getElementById('cookieAcceptAll');
+      var savePrefs = document.getElementById('cookieSavePrefs');
+      var closeModal = document.getElementById('cookieModalClose');
+
+      if (accept) accept.addEventListener('click', function() {
+        saveConsent({ essential: true, analytics: true, marketing: true });
+        hideBanner();
+      });
+      if (decline) decline.addEventListener('click', function() {
+        saveConsent({ essential: true, analytics: false, marketing: false });
+        hideBanner();
+      });
+      if (acceptAll) acceptAll.addEventListener('click', function() {
+        saveConsent({ essential: true, analytics: true, marketing: true });
+        hideModal(); hideBanner();
+      });
+      if (savePrefs) savePrefs.addEventListener('click', function() {
+        var aT = document.getElementById('analyticsToggle');
+        var mT = document.getElementById('marketingToggle');
+        saveConsent({ essential: true, analytics: aT ? aT.checked : false, marketing: mT ? mT.checked : false });
+        hideModal(); hideBanner();
+      });
+      if (closeModal) closeModal.addEventListener('click', hideModal);
+
+      // Open modal from footer link & banner settings link
+      document.querySelectorAll('.cookie-settings-trigger, [href*="Cookie"]').forEach(function(el) {
+        el.addEventListener('click', function(e) {
+          // Only intercept non-page-nav links
+          if (el.tagName === 'A' && el.classList.contains('footer-bottom-link')) {
+            e.preventDefault();
+            showModal();
+          }
+        });
+      });
+      document.querySelectorAll('.cookie-settings-trigger').forEach(function(el) {
+        el.addEventListener('click', function(e) { e.preventDefault(); showModal(); });
+      });
+      // Close modal on overlay click
+      if (modal) modal.addEventListener('click', function(e) { if (e.target === modal) hideModal(); });
+    })();
+
+  </script>
+</body>
+</html>
