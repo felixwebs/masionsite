@@ -1,0 +1,2730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Maison property management dashboard." />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Admin Dashboard — MAISON" />
+  <meta property="og:description" content="Maison property management dashboard." />
+  <meta property="og:image" content="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80" />
+  <meta property="og:url" content="https://maisonrealty.com/admin.html" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Admin Dashboard — MAISON" />
+  <meta name="twitter:description" content="Maison property management dashboard." />
+  <meta name="twitter:image" content="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&q=80" />
+  <link rel="canonical" href="https://maisonrealty.com/admin.html" />
+  <title>Maison · Admin Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream:    #F6F3EE;
+      --warm:     #EDE8DF;
+      --charcoal: #1C1C1C;
+      --ink:      #2E2B27;
+      --muted:    #8A8278;
+      --gold:     #B89B6A;
+      --gold-lt:  #D4BC94;
+      --gold-dk:  #8A7148;
+      --white:    #FDFCFA;
+
+      /* Admin-specific dark surface tokens */
+      --surface-0:  #111110;
+      --surface-1:  #181816;
+      --surface-2:  #1F1F1C;
+      --surface-3:  #272723;
+      --surface-4:  #2E2E29;
+      --border:     rgba(184,155,106,.14);
+      --border-mid: rgba(184,155,106,.28);
+      --text-hi:    #F0EDE8;
+      --text-mid:   rgba(240,237,232,.55);
+      --text-lo:    rgba(240,237,232,.28);
+      --danger:     #C0513A;
+      --success:    #5A8A60;
+
+      --sidebar-w: 260px;
+      --topbar-h:  64px;
+    }
+
+    html { font-size: 16px; }
+
+    body {
+      background: var(--surface-0);
+      color: var(--text-hi);
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      letter-spacing: 0.01em;
+      min-height: 100vh;
+      display: flex;
+      overflow-x: hidden;
+    }
+
+    /* ══════════════════════════════════════════
+       SIDEBAR
+    ══════════════════════════════════════════ */
+    .sidebar {
+      width: var(--sidebar-w);
+      min-height: 100vh;
+      background: var(--surface-1);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; left: 0;
+      z-index: 200;
+      transition: transform .3s cubic-bezier(.22,1,.36,1);
+    }
+
+    .sidebar-logo {
+      padding: 2rem 2rem 1.6rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .sidebar-logo-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem; font-weight: 300;
+      letter-spacing: .22em; text-transform: uppercase;
+      color: var(--gold-lt);
+    }
+    .sidebar-logo-sub {
+      font-size: .58rem; letter-spacing: .32em; text-transform: uppercase;
+      color: var(--text-lo); margin-top: .25rem;
+    }
+
+    .sidebar-nav { flex: 1; padding: 1.4rem 0; overflow-y: auto; }
+    .nav-section-label {
+      font-size: .55rem; letter-spacing: .32em; text-transform: uppercase;
+      color: var(--text-lo); padding: 1.2rem 2rem .5rem;
+    }
+    .nav-item {
+      display: flex; align-items: center; gap: .85rem;
+      padding: .72rem 2rem;
+      font-size: .78rem; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--text-mid);
+      cursor: pointer;
+      transition: color .2s, background .2s;
+      position: relative;
+      user-select: none;
+    }
+    .nav-item:hover { color: var(--text-hi); background: var(--surface-2); }
+    .nav-item.active {
+      color: var(--gold-lt);
+      background: var(--surface-2);
+    }
+    .nav-item.active::before {
+      content: '';
+      position: absolute; left: 0; top: 0; bottom: 0;
+      width: 2px; background: var(--gold);
+    }
+    .nav-icon {
+      width: 16px; height: 16px; opacity: .7; flex-shrink: 0;
+    }
+    .nav-item.active .nav-icon { opacity: 1; }
+
+    .nav-badge {
+      margin-left: auto;
+      font-size: .58rem; letter-spacing: .08em;
+      background: var(--gold); color: var(--charcoal);
+      padding: .18rem .5rem;
+      border-radius: 20px;
+    }
+
+    .sidebar-footer {
+      padding: 1.5rem 2rem;
+      border-top: 1px solid var(--border);
+    }
+    .sidebar-user {
+      display: flex; align-items: center; gap: .9rem;
+    }
+    .user-avatar {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: var(--surface-4);
+      border: 1px solid var(--border-mid);
+      display: grid; place-items: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: .95rem; color: var(--gold-lt);
+      flex-shrink: 0;
+    }
+    .user-name {
+      font-size: .75rem; color: var(--text-hi);
+    }
+    .user-role {
+      font-size: .62rem; color: var(--text-lo);
+      letter-spacing: .1em; text-transform: uppercase;
+    }
+
+    /* ══════════════════════════════════════════
+       MAIN
+    ══════════════════════════════════════════ */
+    .main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      height: var(--topbar-h);
+      background: var(--surface-1);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2.5rem;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .topbar-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem; font-weight: 300;
+      color: var(--text-hi);
+    }
+    .topbar-right { display: flex; align-items: center; gap: 1rem; }
+    .topbar-btn {
+      font-family: 'Jost', sans-serif;
+      font-size: .68rem; letter-spacing: .18em; text-transform: uppercase;
+      background: var(--gold); color: var(--charcoal);
+      border: none; padding: .55rem 1.4rem;
+      cursor: pointer;
+      transition: background .2s, transform .15s;
+    }
+    .topbar-btn:hover { background: var(--gold-lt); transform: translateY(-1px); }
+    .topbar-btn.secondary {
+      background: transparent;
+      border: 1px solid var(--border-mid);
+      color: var(--text-mid);
+    }
+    .topbar-btn.secondary:hover { border-color: var(--gold); color: var(--gold-lt); }
+
+    .content {
+      flex: 1;
+      padding: 2.5rem;
+    }
+
+    /* ══════════════════════════════════════════
+       PANELS / PAGES
+    ══════════════════════════════════════════ */
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* ══════════════════════════════════════════
+       DASHBOARD OVERVIEW
+    ══════════════════════════════════════════ */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      margin-bottom: 2.5rem;
+      border: 1px solid var(--border);
+    }
+    .stat-card {
+      background: var(--surface-1);
+      padding: 1.8rem 2rem;
+    }
+    .stat-card-label {
+      font-size: .6rem; letter-spacing: .28em; text-transform: uppercase;
+      color: var(--text-lo); margin-bottom: .7rem;
+    }
+    .stat-card-value {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.8rem; font-weight: 300;
+      color: var(--gold-lt); line-height: 1;
+      margin-bottom: .3rem;
+    }
+    .stat-card-delta {
+      font-size: .65rem; color: var(--success);
+      letter-spacing: .05em;
+    }
+
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; }
+
+    .widget {
+      background: var(--surface-1);
+      border: 1px solid var(--border);
+    }
+    .widget-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.3rem 1.8rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .widget-title {
+      font-size: .65rem; letter-spacing: .28em; text-transform: uppercase;
+      color: var(--text-lo);
+    }
+    .widget-action {
+      font-size: .6rem; letter-spacing: .18em; text-transform: uppercase;
+      color: var(--gold); cursor: pointer;
+      background: none; border: none;
+      transition: color .2s;
+    }
+    .widget-action:hover { color: var(--gold-lt); }
+    .widget-body { padding: 1.5rem 1.8rem; }
+
+    /* Activity list */
+    .activity-list { list-style: none; }
+    .activity-item {
+      display: flex; align-items: flex-start; gap: 1rem;
+      padding: .8rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .activity-item:last-child { border-bottom: none; }
+    .activity-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--gold); margin-top: .35rem; flex-shrink: 0;
+    }
+    .activity-text {
+      font-size: .8rem; line-height: 1.5; color: var(--text-mid);
+    }
+    .activity-text strong { color: var(--text-hi); font-weight: 400; }
+    .activity-time {
+      font-size: .65rem; color: var(--text-lo);
+      margin-left: auto; white-space: nowrap;
+    }
+
+    /* Quick stats pills */
+    .pill-row { display: flex; gap: .7rem; flex-wrap: wrap; }
+    .pill {
+      font-size: .62rem; letter-spacing: .12em; text-transform: uppercase;
+      padding: .4rem 1rem;
+      border: 1px solid var(--border);
+      color: var(--text-mid);
+    }
+    .pill.gold { border-color: var(--gold); color: var(--gold-lt); }
+
+    /* ══════════════════════════════════════════
+       LISTINGS TABLE
+    ══════════════════════════════════════════ */
+    .toolbar {
+      display: flex; align-items: center; gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .search-input-wrap {
+      position: relative; flex: 1; min-width: 220px;
+    }
+    .search-input {
+      width: 100%;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: var(--text-hi);
+      font-family: 'Jost', sans-serif;
+      font-size: .78rem; letter-spacing: .05em;
+      padding: .65rem 1rem .65rem 2.4rem;
+      outline: none;
+      transition: border-color .2s;
+    }
+    .search-input:focus { border-color: var(--gold); }
+    .search-icon {
+      position: absolute; left: .85rem; top: 50%; transform: translateY(-50%);
+      color: var(--text-lo); pointer-events: none;
+    }
+    .filter-select {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: var(--text-mid);
+      font-family: 'Jost', sans-serif;
+      font-size: .72rem; letter-spacing: .08em;
+      padding: .65rem 1rem;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--surface-1);
+      border: 1px solid var(--border);
+    }
+    .data-table thead tr {
+      border-bottom: 1px solid var(--border);
+    }
+    .data-table th {
+      font-size: .58rem; letter-spacing: .28em; text-transform: uppercase;
+      color: var(--text-lo);
+      padding: 1rem 1.4rem;
+      text-align: left; font-weight: 400;
+    }
+    .data-table td {
+      padding: 1.1rem 1.4rem;
+      font-size: .8rem; color: var(--text-mid);
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tbody tr { transition: background .15s; }
+    .data-table tbody tr:hover { background: var(--surface-2); }
+
+    .listing-thumb {
+      width: 58px; height: 40px; object-fit: cover;
+      display: block;
+    }
+    .listing-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem; font-weight: 400;
+      color: var(--text-hi);
+    }
+    .listing-location {
+      font-size: .65rem; color: var(--text-lo);
+      letter-spacing: .08em;
+    }
+    .status-badge {
+      display: inline-block;
+      font-size: .56rem; letter-spacing: .18em; text-transform: uppercase;
+      padding: .28rem .7rem;
+      border: 1px solid;
+    }
+    .status-badge.active   { border-color: var(--success); color: var(--success); }
+    .status-badge.reduced  { border-color: var(--gold);    color: var(--gold-lt); }
+    .status-badge.sold     { border-color: var(--muted);   color: var(--muted); }
+    .status-badge.soon     { border-color: #7a9cc0;        color: #7a9cc0; }
+
+    .action-btns { display: flex; gap: .5rem; }
+    .btn-icon {
+      background: var(--surface-3);
+      border: 1px solid var(--border);
+      color: var(--text-mid);
+      padding: .4rem .7rem;
+      font-size: .65rem; letter-spacing: .1em; text-transform: uppercase;
+      cursor: pointer; transition: all .2s;
+      font-family: 'Jost', sans-serif;
+    }
+    .btn-icon:hover { border-color: var(--gold); color: var(--gold-lt); }
+    .btn-icon.danger:hover { border-color: var(--danger); color: var(--danger); }
+
+    /* ══════════════════════════════════════════
+       MODAL / FORM OVERLAY
+    ══════════════════════════════════════════ */
+    .overlay {
+      position: fixed; inset: 0; z-index: 999;
+      background: rgba(0,0,0,.75);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 2rem 1rem;
+      overflow-y: auto;
+    }
+    .overlay.open { display: flex; }
+
+    .modal {
+      background: var(--surface-1);
+      border: 1px solid var(--border-mid);
+      width: 100%;
+      max-width: 760px;
+      position: relative;
+      animation: modalIn .3s cubic-bezier(.22,1,.36,1);
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .modal-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.8rem 2.2rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .modal-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem; font-weight: 300;
+      color: var(--text-hi);
+    }
+    .modal-close {
+      background: none; border: none;
+      color: var(--text-lo); font-size: 1.3rem;
+      cursor: pointer; padding: .2rem .4rem;
+      transition: color .2s;
+      line-height: 1;
+    }
+    .modal-close:hover { color: var(--text-hi); }
+
+    .modal-body { padding: 2.2rem; }
+    .modal-footer {
+      display: flex; align-items: center; justify-content: flex-end;
+      gap: 1rem;
+      padding: 1.5rem 2.2rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ══════════════════════════════════════════
+       FORM ELEMENTS
+    ══════════════════════════════════════════ */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.4rem;
+    }
+    .form-group { display: flex; flex-direction: column; gap: .5rem; }
+    .form-group.full { grid-column: 1/-1; }
+    .form-label {
+      font-size: .6rem; letter-spacing: .25em; text-transform: uppercase;
+      color: var(--text-lo);
+    }
+    .form-input, .form-select, .form-textarea {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-bottom-color: var(--border-mid);
+      color: var(--text-hi);
+      font-family: 'Jost', sans-serif;
+      font-size: .82rem;
+      padding: .75rem 1rem;
+      outline: none;
+      transition: border-color .2s;
+      width: 100%;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--gold);
+    }
+    .form-textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
+    .form-select { cursor: pointer; }
+    .form-input::placeholder { color: var(--text-lo); }
+
+    /* Image upload zone */
+    .upload-zone {
+      border: 1px dashed var(--border-mid);
+      background: var(--surface-2);
+      padding: 2.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color .2s, background .2s;
+      position: relative;
+    }
+    .upload-zone:hover { border-color: var(--gold); background: var(--surface-3); }
+    .upload-zone input[type="file"] {
+      position: absolute; inset: 0; opacity: 0; cursor: pointer;
+    }
+    .upload-icon { font-size: 1.8rem; margin-bottom: .8rem; color: var(--text-lo); }
+    .upload-label {
+      font-size: .72rem; letter-spacing: .15em; text-transform: uppercase;
+      color: var(--text-mid);
+    }
+    .upload-sub {
+      font-size: .65rem; color: var(--text-lo); margin-top: .3rem;
+    }
+
+    .image-previews {
+      display: flex; flex-wrap: wrap; gap: .8rem;
+      margin-top: 1.2rem;
+    }
+    .preview-thumb {
+      position: relative; width: 90px; height: 65px;
+    }
+    .preview-thumb img {
+      width: 100%; height: 100%; object-fit: cover;
+      display: block;
+    }
+    .preview-remove {
+      position: absolute; top: -6px; right: -6px;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--danger); color: #fff;
+      border: none; font-size: .65rem;
+      display: grid; place-items: center;
+      cursor: pointer; line-height: 1;
+    }
+
+    /* Tabs inside forms */
+    .form-tabs {
+      display: flex; gap: 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+    .form-tab {
+      font-size: .65rem; letter-spacing: .2em; text-transform: uppercase;
+      color: var(--text-lo);
+      padding: .85rem 1.6rem;
+      cursor: pointer;
+      margin-bottom: -1px;
+      transition: color .2s;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      font-family: 'Jost', sans-serif;
+    }
+    .form-tab.active { color: var(--gold-lt); border-bottom-color: var(--gold); }
+    .form-tab:hover { color: var(--text-mid); }
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+
+    /* ══════════════════════════════════════════
+       AGENTS PANEL
+    ══════════════════════════════════════════ */
+    .agents-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .agent-card {
+      background: var(--surface-1);
+      border: 1px solid var(--border);
+      transition: border-color .25s;
+    }
+    .agent-card:hover { border-color: var(--border-mid); }
+    .agent-photo-wrap {
+      height: 220px; overflow: hidden;
+      position: relative;
+    }
+    .agent-photo {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform .7s cubic-bezier(.22,1,.36,1);
+    }
+    .agent-card:hover .agent-photo { transform: scale(1.04); }
+    .agent-photo-placeholder {
+      width: 100%; height: 100%;
+      background: var(--surface-3);
+      display: grid; place-items: center;
+    }
+    .agent-photo-placeholder span {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3.5rem; color: var(--surface-4);
+    }
+    .agent-body { padding: 1.4rem 1.6rem; }
+    .agent-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem; font-weight: 400;
+      color: var(--text-hi); margin-bottom: .2rem;
+    }
+    .agent-title {
+      font-size: .62rem; letter-spacing: .18em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: .9rem;
+    }
+    .agent-bio {
+      font-size: .78rem; line-height: 1.7;
+      color: var(--text-lo); margin-bottom: 1.2rem;
+    }
+    .agent-meta { display: flex; gap: 1.2rem; }
+    .agent-meta-item {
+      font-size: .65rem; letter-spacing: .08em;
+      color: var(--text-lo);
+    }
+    .agent-meta-item strong {
+      display: block; font-size: .85rem; font-weight: 400;
+      color: var(--text-mid); margin-bottom: .1rem;
+    }
+    .agent-actions {
+      display: flex; gap: .5rem;
+      padding: 1rem 1.6rem;
+      border-top: 1px solid var(--border);
+    }
+    .add-card {
+      background: var(--surface-1);
+      border: 1px dashed var(--border-mid);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      min-height: 360px;
+      cursor: pointer;
+      transition: border-color .2s, background .2s;
+      gap: .8rem;
+    }
+    .add-card:hover { border-color: var(--gold); background: var(--surface-2); }
+    .add-card-icon {
+      font-size: 2rem; color: var(--border-mid);
+      transition: color .2s;
+    }
+    .add-card:hover .add-card-icon { color: var(--gold); }
+    .add-card-label {
+      font-size: .65rem; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--text-lo);
+    }
+
+    /* ══════════════════════════════════════════
+       TESTIMONIALS PANEL
+    ══════════════════════════════════════════ */
+    .testimonials-list { display: flex; flex-direction: column; gap: 1rem; }
+    .t-card {
+      background: var(--surface-1);
+      border: 1px solid var(--border);
+      padding: 1.8rem 2rem;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 1.5rem;
+      align-items: start;
+      transition: border-color .2s;
+    }
+    .t-card:hover { border-color: var(--border-mid); }
+    .t-card.featured { border-left: 2px solid var(--gold); }
+    .t-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.08rem; font-weight: 300;
+      line-height: 1.55; color: var(--text-hi);
+      margin-bottom: .8rem;
+    }
+    .t-author {
+      font-size: .65rem; letter-spacing: .2em; text-transform: uppercase;
+      color: var(--gold);
+    }
+    .t-controls { display: flex; flex-direction: column; gap: .5rem; align-items: flex-end; }
+    .t-order-btns { display: flex; flex-direction: column; gap: 3px; }
+    .t-order-btn {
+      background: var(--surface-3);
+      border: 1px solid var(--border);
+      color: var(--text-mid); font-size: .7rem;
+      padding: .25rem .5rem; cursor: pointer;
+      transition: all .15s; font-family: 'Jost', sans-serif;
+    }
+    .t-order-btn:hover { border-color: var(--gold); color: var(--gold-lt); }
+    .star-row { display: flex; gap: 3px; }
+    .star { color: var(--gold); font-size: .8rem; }
+    .star.empty { color: var(--surface-4); }
+
+    /* ══════════════════════════════════════════
+       TOAST NOTIFICATION
+    ══════════════════════════════════════════ */
+    .toast-container {
+      position: fixed; bottom: 2rem; right: 2rem;
+      z-index: 9999;
+      display: flex; flex-direction: column; gap: .7rem;
+    }
+    .toast {
+      background: var(--surface-2);
+      border: 1px solid var(--border-mid);
+      border-left: 3px solid var(--gold);
+      padding: .9rem 1.4rem;
+      font-size: .75rem; color: var(--text-hi);
+      min-width: 260px;
+      animation: toastIn .3s cubic-bezier(.22,1,.36,1);
+      display: flex; align-items: center; gap: .8rem;
+    }
+    .toast.success { border-left-color: var(--success); }
+    .toast.danger   { border-left-color: var(--danger); }
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateX(20px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    /* ══════════════════════════════════════════
+       CONFIRM DIALOG
+    ══════════════════════════════════════════ */
+    .confirm-modal {
+      background: var(--surface-1);
+      border: 1px solid var(--border-mid);
+      width: 100%;
+      max-width: 420px;
+      padding: 2.2rem;
+      margin: auto;
+      animation: modalIn .3s cubic-bezier(.22,1,.36,1);
+    }
+    .confirm-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem; color: var(--text-hi);
+      margin-bottom: .7rem;
+    }
+    .confirm-body {
+      font-size: .8rem; line-height: 1.65;
+      color: var(--text-mid); margin-bottom: 1.8rem;
+    }
+    .confirm-actions { display: flex; gap: .8rem; justify-content: flex-end; }
+    .btn-danger {
+      font-family: 'Jost', sans-serif;
+      font-size: .68rem; letter-spacing: .18em; text-transform: uppercase;
+      background: var(--danger); color: #fff;
+      border: none; padding: .6rem 1.4rem;
+      cursor: pointer;
+      transition: opacity .2s;
+    }
+    .btn-danger:hover { opacity: .85; }
+
+    /* ══════════════════════════════════════════
+       SECTION DIVIDER
+    ══════════════════════════════════════════ */
+    .section-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 2rem 0;
+    }
+
+    /* ══════════════════════════════════════════
+       EMPTY STATE
+    ══════════════════════════════════════════ */
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--text-lo);
+    }
+    .empty-state-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .empty-state-text { font-size: .8rem; letter-spacing: .05em; }
+
+    /* ══════════════════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════════════════ */
+    @media (max-width: 1100px) {
+      .agents-grid { grid-template-columns: 1fr 1fr; }
+      .stats-row   { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 820px) {
+      :root { --sidebar-w: 0px; }
+      .sidebar { transform: translateX(-260px); --sidebar-w: 260px; }
+      .sidebar.open { transform: translateX(0); }
+      .main { margin-left: 0; }
+      .form-grid { grid-template-columns: 1fr; }
+      .two-col, .three-col { grid-template-columns: 1fr; }
+      .agents-grid { grid-template-columns: 1fr; }
+    }
+    /* ══════════════════════════════════════════
+       LOGIN SCREEN
+    ══════════════════════════════════════════ */
+    #loginScreen {
+      position: fixed; inset: 0; z-index: 9999;
+      background: var(--surface-0);
+      display: flex; align-items: center; justify-content: center;
+    }
+    #loginScreen.hidden { display: none; }
+    .login-box {
+      width: 100%; max-width: 400px;
+      background: var(--surface-1);
+      border: 1px solid var(--border-mid);
+      padding: 3rem 2.8rem;
+      animation: modalIn .4s cubic-bezier(.22,1,.36,1);
+    }
+    .login-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem; font-weight: 300;
+      letter-spacing: .22em; text-transform: uppercase;
+      color: var(--gold-lt);
+      text-align: center; margin-bottom: .4rem;
+    }
+    .login-sub {
+      font-size: .58rem; letter-spacing: .32em; text-transform: uppercase;
+      color: var(--text-lo); text-align: center; margin-bottom: 2.4rem;
+    }
+    .login-error {
+      font-size: .72rem; color: var(--danger); text-align: center;
+      margin-bottom: 1rem; min-height: 1.2rem;
+    }
+    .login-hint {
+      font-size: .65rem; color: var(--text-lo); text-align: center;
+      margin-top: 1.2rem; letter-spacing: .04em;
+    }
+
+    /* ══════════════════════════════════════════
+       SUPABASE CONFIG BANNER
+    ══════════════════════════════════════════ */
+    #supabaseBanner {
+      background: rgba(184,155,106,.12);
+      border: 1px solid var(--gold);
+      color: var(--gold-lt);
+      font-size: .72rem; letter-spacing: .05em;
+      padding: .7rem 1.2rem;
+      margin-bottom: 1.5rem;
+      display: flex; align-items: center; gap: .7rem;
+    }
+    #supabaseBanner.hidden { display: none; }
+
+    /* ══════════════════════════════════════════
+       UPLOAD PROGRESS
+    ══════════════════════════════════════════ */
+    .upload-progress {
+      margin-top: .6rem;
+      height: 2px;
+      background: var(--border);
+      overflow: hidden;
+      display: none;
+    }
+    .upload-progress.active { display: block; }
+    .upload-progress-bar {
+      height: 100%; background: var(--gold);
+      width: 0%; transition: width .3s;
+    }
+    .upload-status {
+      font-size: .65rem; color: var(--text-lo);
+      margin-top: .4rem; min-height: 1rem;
+    }
+
+    /* Sidebar logout btn */
+    .btn-logout {
+      background: none; border: 1px solid var(--border);
+      color: var(--text-lo); font-family: 'Jost', sans-serif;
+      font-size: .6rem; letter-spacing: .15em; text-transform: uppercase;
+      padding: .35rem .8rem; cursor: pointer; margin-top: .6rem;
+      transition: all .2s; display: block; width: 100%;
+    }
+    .btn-logout:hover { border-color: var(--danger); color: var(--danger); }
+  
+    /* ━━━ MOBILE HAMBURGER ━━━ */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 36px; height: 36px;
+      background: none; border: none; cursor: pointer;
+      padding: 4px; z-index: 200;
+    }
+    .nav-hamburger span {
+      display: block; width: 100%; height: 1px;
+      background: currentColor;
+      transition: transform .35s cubic-bezier(.22,1,.36,1), opacity .25s ease, width .3s ease;
+      transform-origin: center;
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; width: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+    .nav-mobile-overlay {
+      display: none;
+      position: fixed; inset: 0; z-index: 150;
+      background: rgba(28,28,28,.97);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2.4rem;
+      opacity: 0;
+      transition: opacity .4s cubic-bezier(.22,1,.36,1);
+      pointer-events: none;
+    }
+    .nav-mobile-overlay.visible {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .nav-mobile-overlay a {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 7vw, 3rem);
+      font-weight: 300;
+      letter-spacing: .12em;
+      color: rgba(255,255,255,.7);
+      text-decoration: none;
+      transition: color .3s;
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity .4s ease, transform .4s cubic-bezier(.22,1,.36,1), color .3s;
+    }
+    .nav-mobile-overlay.visible a {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .nav-mobile-overlay.visible a:nth-child(1) { transition-delay: .08s; }
+    .nav-mobile-overlay.visible a:nth-child(2) { transition-delay: .14s; }
+    .nav-mobile-overlay.visible a:nth-child(3) { transition-delay: .20s; }
+    .nav-mobile-overlay.visible a:nth-child(4) { transition-delay: .26s; }
+    .nav-mobile-overlay.visible a:nth-child(5) { transition-delay: .32s; }
+    .nav-mobile-overlay a:hover { color: var(--gold); }
+    .nav-mobile-close {
+      position: absolute; top: 1.8rem; right: 1.8rem;
+      width: 36px; height: 36px;
+      background: none; border: 1px solid rgba(255,255,255,.15);
+      color: rgba(255,255,255,.6);
+      font-size: 1.1rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color .3s, color .3s;
+    }
+    .nav-mobile-close:hover { border-color: var(--gold); color: var(--gold); }
+
+    @media (max-width: 768px) {
+      .nav-hamburger { display: flex; }
+      .nav-links, .nav-cta { display: none !important; }
+    }
+
+    /* ━━━ PAGE TRANSITION OVERLAY ━━━ */
+    #page-transition {
+      position: fixed; inset: 0; z-index: 9000;
+      background: var(--charcoal);
+      pointer-events: none;
+      transform: scaleY(0);
+      transform-origin: bottom;
+    }
+    #page-transition.leave {
+      transform: scaleY(1);
+      transform-origin: bottom;
+      transition: transform .45s cubic-bezier(.76,0,.24,1);
+    }
+    #page-transition.enter {
+      transform: scaleY(0);
+      transform-origin: top;
+      transition: transform .45s cubic-bezier(.76,0,.24,1);
+    }
+
+    /* ━━━ COOKIE BANNER ━━━ */
+    #cookie-banner {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 8000;
+      background: var(--charcoal);
+      border-top: 1px solid rgba(184,155,106,.25);
+      padding: 1.6rem 3rem;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 2rem; flex-wrap: wrap;
+      transform: translateY(100%);
+      transition: transform .55s cubic-bezier(.22,1,.36,1);
+    }
+    #cookie-banner.visible { transform: translateY(0); }
+    .cookie-text {
+      font-size: .8rem; color: rgba(255,255,255,.55);
+      letter-spacing: .03em; line-height: 1.7;
+      max-width: 640px;
+    }
+    .cookie-text a {
+      color: var(--gold); text-decoration: none;
+      border-bottom: 1px solid rgba(184,155,106,.4);
+      transition: color .3s, border-color .3s;
+    }
+    .cookie-text a:hover { color: var(--gold-lt); border-color: var(--gold-lt); }
+    .cookie-actions { display: flex; gap: .9rem; flex-shrink: 0; }
+    .cookie-btn {
+      font-family: 'Jost', sans-serif; font-weight: 300;
+      font-size: .68rem; letter-spacing: .2em; text-transform: uppercase;
+      border: none; padding: .75rem 1.6rem; cursor: pointer;
+      transition: background .3s, transform .2s;
+    }
+    .cookie-btn-accept { background: var(--gold); color: var(--charcoal); }
+    .cookie-btn-accept:hover { background: var(--gold-lt); transform: translateY(-1px); }
+    .cookie-btn-decline { background: transparent; color: rgba(255,255,255,.4); border: 1px solid rgba(255,255,255,.15); }
+    .cookie-btn-decline:hover { border-color: rgba(255,255,255,.4); color: rgba(255,255,255,.7); }
+
+    /* ━━━ COOKIE SETTINGS MODAL ━━━ */
+    #cookie-modal {
+      position: fixed; inset: 0; z-index: 9500;
+      background: rgba(28,28,28,.85); backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity .3s ease;
+    }
+    #cookie-modal.visible { opacity: 1; pointer-events: all; }
+    .cookie-modal-box {
+      background: var(--white); max-width: 560px; width: 90%;
+      padding: 3rem; position: relative;
+      transform: translateY(20px);
+      transition: transform .35s cubic-bezier(.22,1,.36,1);
+    }
+    #cookie-modal.visible .cookie-modal-box { transform: translateY(0); }
+    .cookie-modal-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem; font-weight: 300; color: var(--ink);
+      margin-bottom: 1rem;
+    }
+    .cookie-modal-desc {
+      font-size: .85rem; line-height: 1.75; color: var(--muted);
+      margin-bottom: 2rem;
+    }
+    .cookie-toggle-row {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      padding: 1rem 0; border-bottom: 1px solid var(--warm); gap: 1.5rem;
+    }
+    .cookie-toggle-info h4 {
+      font-family: 'Jost', sans-serif; font-weight: 400;
+      font-size: .82rem; letter-spacing: .06em; color: var(--ink);
+      margin-bottom: .25rem;
+    }
+    .cookie-toggle-info p { font-size: .75rem; color: var(--muted); line-height: 1.6; }
+    .cookie-toggle {
+      position: relative; flex-shrink: 0;
+      width: 40px; height: 22px;
+    }
+    .cookie-toggle input { opacity: 0; width: 0; height: 0; }
+    .cookie-toggle-slider {
+      position: absolute; inset: 0; cursor: pointer;
+      background: var(--warm); transition: background .3s;
+      border-radius: 22px;
+    }
+    .cookie-toggle-slider::before {
+      content: ''; position: absolute;
+      width: 16px; height: 16px; border-radius: 50%;
+      background: white; bottom: 3px; left: 3px;
+      transition: transform .3s;
+    }
+    .cookie-toggle input:checked + .cookie-toggle-slider { background: var(--gold); }
+    .cookie-toggle input:checked + .cookie-toggle-slider::before { transform: translateX(18px); }
+    .cookie-toggle input:disabled + .cookie-toggle-slider { opacity: .5; cursor: default; }
+    .cookie-modal-actions {
+      margin-top: 2rem; display: flex; gap: .8rem; justify-content: flex-end;
+    }
+    .cookie-modal-close {
+      position: absolute; top: 1.2rem; right: 1.2rem;
+      width: 32px; height: 32px; background: none; border: none;
+      cursor: pointer; color: var(--muted); font-size: 1.1rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: color .3s;
+    }
+    .cookie-modal-close:hover { color: var(--ink); }
+
+  </style>
+</head>
+<body>
+
+  <!-- PAGE TRANSITION OVERLAY -->
+  <div id="page-transition"></div>
+
+  <!-- MOBILE NAV OVERLAY -->
+  <div class="nav-mobile-overlay" id="mobileOverlay">
+    <button class="nav-mobile-close" id="mobileClose" aria-label="Close menu">✕</button>
+    <a href="index.html">Home</a>
+    <a href="properties.html">Properties</a>
+    <a href="index.html#neighbourhoods">Neighbourhoods</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </div>
+
+  <!-- COOKIE BANNER -->
+  <div id="cookie-banner" role="region" aria-label="Cookie consent">
+    <p class="cookie-text">
+      We use cookies to enhance your experience and analyse site traffic.
+      By clicking <strong style="color:rgba(255,255,255,.75)">Accept</strong>, you agree to our use of cookies.
+      <a href="#" class="cookie-settings-trigger">Cookie Settings</a> ·
+      <a href="#">Privacy Policy</a>
+    </p>
+    <div class="cookie-actions">
+      <button class="cookie-btn cookie-btn-decline" id="cookieDecline">Decline</button>
+      <button class="cookie-btn cookie-btn-accept" id="cookieAccept">Accept All</button>
+    </div>
+  </div>
+
+  <!-- COOKIE SETTINGS MODAL -->
+  <div id="cookie-modal" role="dialog" aria-modal="true" aria-labelledby="cookieModalTitle">
+    <div class="cookie-modal-box">
+      <button class="cookie-modal-close" id="cookieModalClose" aria-label="Close">✕</button>
+      <h2 class="cookie-modal-title" id="cookieModalTitle">Cookie Preferences</h2>
+      <p class="cookie-modal-desc">Manage your cookie preferences below. Essential cookies are always enabled as they are necessary for the website to function.</p>
+      <div class="cookie-toggle-row">
+        <div class="cookie-toggle-info">
+          <h4>Essential Cookies</h4>
+          <p>Required for basic site functionality. Cannot be disabled.</p>
+        </div>
+        <label class="cookie-toggle"><input type="checkbox" checked disabled><span class="cookie-toggle-slider"></span></label>
+      </div>
+      <div class="cookie-toggle-row">
+        <div class="cookie-toggle-info">
+          <h4>Analytics Cookies</h4>
+          <p>Help us understand how visitors interact with our site.</p>
+        </div>
+        <label class="cookie-toggle"><input type="checkbox" id="analyticsToggle"><span class="cookie-toggle-slider"></span></label>
+      </div>
+      <div class="cookie-toggle-row">
+        <div class="cookie-toggle-info">
+          <h4>Marketing Cookies</h4>
+          <p>Used to deliver relevant advertising and track campaign effectiveness.</p>
+        </div>
+        <label class="cookie-toggle"><input type="checkbox" id="marketingToggle"><span class="cookie-toggle-slider"></span></label>
+      </div>
+      <div class="cookie-modal-actions">
+        <button class="cookie-btn cookie-btn-decline" id="cookieSavePrefs">Save Preferences</button>
+        <button class="cookie-btn cookie-btn-accept" id="cookieAcceptAll">Accept All</button>
+      </div>
+    </div>
+  </div>
+
+<!-- ═══════════════════════════════════════════════════════
+     LOGIN SCREEN
+═══════════════════════════════════════════════════════ -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">Maison</div>
+    <div class="login-sub">Admin · Secure Access</div>
+    <div class="login-error" id="loginError"></div>
+    <div class="form-group" style="margin-bottom:1rem">
+      <label class="form-label">Password</label>
+      <input class="form-input" type="password" id="loginPassword"
+             placeholder="Enter admin password"
+             onkeydown="if(event.key==='Enter') submitLogin()" />
+    </div>
+    <button id="loginBtn" class="topbar-btn" style="width:100%;text-align:center" onclick="submitLogin()">Sign In →</button>
+    <div class="login-hint">Default password: <strong style="color:var(--text-mid)">maison2025</strong><br>Change it in Site Settings after logging in.</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SIDEBAR
+═══════════════════════════════════════════════════════ -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-name">Maison</div>
+    <div class="sidebar-logo-sub">Admin Dashboard</div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Overview</div>
+    <div class="nav-item active" data-panel="dashboard" onclick="switchPanel('dashboard', this)">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4">
+        <rect x="1" y="1" width="6" height="6"/><rect x="9" y="1" width="6" height="6"/>
+        <rect x="1" y="9" width="6" height="6"/><rect x="9" y="9" width="6" height="6"/>
+      </svg>
+      Dashboard
+    </div>
+
+    <div class="nav-section-label">Content</div>
+    <div class="nav-item" data-panel="listings" onclick="switchPanel('listings', this)">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4">
+        <rect x="1" y="1" width="14" height="10"/><line x1="1" y1="14" x2="15" y2="14"/>
+        <line x1="4" y1="14" x2="4" y2="11"/><line x1="12" y1="14" x2="12" y2="11"/>
+      </svg>
+      Listings
+      <span class="nav-badge" id="listingsBadge">6</span>
+    </div>
+    <div class="nav-item" data-panel="agents" onclick="switchPanel('agents', this)">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4">
+        <circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6"/>
+      </svg>
+      Agents
+    </div>
+    <div class="nav-item" data-panel="testimonials" onclick="switchPanel('testimonials', this)">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4">
+        <path d="M2 2h12v9H9l-3 3V11H2z"/>
+      </svg>
+      Testimonials
+    </div>
+
+    <div class="nav-section-label">Settings</div>
+    <div class="nav-item" data-panel="settings" onclick="switchPanel('settings', this)">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4">
+        <circle cx="8" cy="8" r="2.5"/>
+        <path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.42 1.42M11.53 11.53l1.42 1.42M3.05 12.95l1.42-1.42M11.53 4.47l1.42-1.42"/>
+      </svg>
+      Site Settings
+    </div>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="sidebar-user">
+      <div class="user-avatar">A</div>
+      <div>
+        <div class="user-name" id="sidebarUserName">Admin User</div>
+        <div class="user-role">Super Admin</div>
+      </div>
+    </div>
+    <button class="btn-logout" onclick="logout()">Sign Out</button>
+  </div>
+</aside>
+
+<!-- ═══════════════════════════════════════════════════════
+     MAIN
+═══════════════════════════════════════════════════════ -->
+<div class="main">
+  <header class="topbar">
+    <div class="topbar-title" id="topbarTitle">Dashboard</div>
+    <div class="topbar-right">
+      <button class="topbar-btn secondary" onclick="viewSite()">View Site ↗</button>
+      <button class="topbar-btn" id="topbarAction" onclick="topbarActionClick()">+ New Listing</button>
+    </div>
+  </header>
+
+  <div class="content">
+
+    <!-- ━━━━━━━━━━━━━━━ DASHBOARD ━━━━━━━━━━━━━━━ -->
+    <div class="panel active" id="panel-dashboard">
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-card-label">Active Listings</div>
+          <div class="stat-card-value" id="dash-active">—</div>
+          <div class="stat-card-delta">↑ 2 this month</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Total Agents</div>
+          <div class="stat-card-value" id="dash-agents">—</div>
+          <div class="stat-card-delta">↑ 1 this quarter</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Testimonials</div>
+          <div class="stat-card-value" id="dash-testimonials">—</div>
+          <div class="stat-card-delta">↑ 3 this month</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-label">Enquiries (30d)</div>
+          <div class="stat-card-value">47</div>
+          <div class="stat-card-delta">↑ 12% vs prior period</div>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="widget">
+          <div class="widget-header">
+            <span class="widget-title">Recent Activity</span>
+          </div>
+          <div class="widget-body">
+            <ul class="activity-list" id="activityList">
+              <li class="activity-item">
+                <div class="activity-dot"></div>
+                <div class="activity-text"><strong>Villa Lumière</strong> listing updated</div>
+                <div class="activity-time">2m ago</div>
+              </li>
+              <li class="activity-item">
+                <div class="activity-dot"></div>
+                <div class="activity-text">New testimonial from <strong>James Hartwell</strong></div>
+                <div class="activity-time">1h ago</div>
+              </li>
+              <li class="activity-item">
+                <div class="activity-dot"></div>
+                <div class="activity-text">Agent <strong>Sophie Laurent</strong> added</div>
+                <div class="activity-time">3h ago</div>
+              </li>
+              <li class="activity-item">
+                <div class="activity-dot"></div>
+                <div class="activity-text"><strong>Casa Solaris</strong> marked as Reduced</div>
+                <div class="activity-time">Yesterday</div>
+              </li>
+              <li class="activity-item">
+                <div class="activity-dot"></div>
+                <div class="activity-text">New enquiry on <strong>The Whitmore</strong></div>
+                <div class="activity-time">Yesterday</div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="widget">
+          <div class="widget-header">
+            <span class="widget-title">Listing Status</span>
+            <button class="widget-action" onclick="switchPanel('listings', document.querySelector('[data-panel=listings]'))">Manage →</button>
+          </div>
+          <div class="widget-body">
+            <div class="pill-row" style="margin-bottom:1.5rem">
+              <span class="pill gold" id="dash-pill-active">— Active</span>
+              <span class="pill" id="dash-pill-sold">— Sold</span>
+              <span class="pill" id="dash-pill-soon">— Coming Soon</span>
+              <span class="pill" id="dash-pill-reduced">— Reduced</span>
+            </div>
+            <div id="dash-listing-preview"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ━━━━━━━━━━━━━━━ LISTINGS ━━━━━━━━━━━━━━━ -->
+    <div class="panel" id="panel-listings">
+      <div class="toolbar">
+        <div class="search-input-wrap">
+          <span class="search-icon">⌕</span>
+          <input class="search-input" type="text" placeholder="Search listings…" oninput="filterListings(this.value)" />
+        </div>
+        <select class="filter-select" onchange="filterListingsByStatus(this.value)">
+          <option value="">All Statuses</option>
+          <option value="active">Active</option>
+          <option value="reduced">Reduced</option>
+          <option value="soon">Coming Soon</option>
+          <option value="sold">Sold</option>
+        </select>
+      </div>
+
+      <table class="data-table" id="listingsTable">
+        <thead>
+          <tr>
+            <th>Photo</th>
+            <th>Property</th>
+            <th>Price</th>
+            <th>Status</th>
+            <th>Beds</th>
+            <th>Market</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="listingsTbody"></tbody>
+      </table>
+    </div>
+
+    <!-- ━━━━━━━━━━━━━━━ AGENTS ━━━━━━━━━━━━━━━ -->
+    <div class="panel" id="panel-agents">
+      <div class="toolbar">
+        <div class="search-input-wrap">
+          <span class="search-icon">⌕</span>
+          <input class="search-input" type="text" placeholder="Search agents…" oninput="filterAgents(this.value)" />
+        </div>
+      </div>
+      <div class="agents-grid" id="agentsGrid"></div>
+    </div>
+
+    <!-- ━━━━━━━━━━━━━━━ TESTIMONIALS ━━━━━━━━━━━━━━━ -->
+    <div class="panel" id="panel-testimonials">
+      <div class="toolbar">
+        <div class="search-input-wrap">
+          <span class="search-icon">⌕</span>
+          <input class="search-input" type="text" placeholder="Search testimonials…" oninput="filterTestimonials(this.value)" />
+        </div>
+      </div>
+      <div class="testimonials-list" id="testimonialsList"></div>
+    </div>
+
+    <!-- ━━━━━━━━━━━━━━━ SETTINGS ━━━━━━━━━━━━━━━ -->
+    <div class="panel" id="panel-settings">
+      <!-- Supabase setup banner -->
+      <div id="supabaseBanner" style="max-width:640px;margin-bottom:1.5rem">
+        <span>⚠</span>
+        <span>Supabase not configured — data is saved locally only. Add your credentials in <strong>Database Settings</strong> below to enable cloud persistence.</span>
+      </div>
+
+      <div class="widget" style="max-width:640px;margin-bottom:1.5rem">
+        <div class="widget-header"><span class="widget-title">Site Settings</span></div>
+        <div class="widget-body">
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Company Name</label>
+              <input class="form-input" type="text" value="Maison" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Founded Year</label>
+              <input class="form-input" type="text" value="1994" />
+            </div>
+            <div class="form-group full">
+              <label class="form-label">Tagline</label>
+              <input class="form-input" type="text" value="Connecting extraordinary people with the finest homes in the world's most coveted addresses." />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Contact Email</label>
+              <input class="form-input" type="email" value="hello@maisonrealty.com" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Phone Number</label>
+              <input class="form-input" type="text" value="+44 20 7123 4567" />
+            </div>
+            <div class="form-group full">
+              <label class="form-label">Hero Headline</label>
+              <input class="form-input" type="text" value="Where living becomes art" />
+            </div>
+            <div class="form-group full">
+              <label class="form-label">Hero Subheading</label>
+              <input class="form-input" type="text" value="A collection of extraordinary homes in the world's most coveted addresses." />
+            </div>
+          </div>
+          <hr class="section-divider" />
+          <div style="display:flex;justify-content:flex-end">
+            <button class="topbar-btn" onclick="showToast('Settings saved successfully', 'success')">Save Settings</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Password change -->
+      <div class="widget" style="max-width:640px;margin-bottom:1.5rem">
+        <div class="widget-header">
+          <span class="widget-title">Change Admin Password</span>
+          <span style="font-size:.62rem;color:var(--text-lo);letter-spacing:.08em">Stored locally in your browser</span>
+        </div>
+        <div class="widget-body">
+          <div class="form-grid" style="grid-template-columns:1fr">
+            <div class="form-group">
+              <label class="form-label">Current Password</label>
+              <input class="form-input" type="password" id="pw-current" placeholder="Current password" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">New Password</label>
+              <input class="form-input" type="password" id="pw-new" placeholder="New password (min 8 chars)" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Confirm New Password</label>
+              <input class="form-input" type="password" id="pw-confirm" placeholder="Repeat new password" />
+            </div>
+          </div>
+          <hr class="section-divider" />
+          <div style="display:flex;justify-content:flex-end">
+            <button class="topbar-btn" onclick="changePassword()">Update Password</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Supabase config -->
+      <div class="widget" style="max-width:640px">
+        <div class="widget-header">
+          <span class="widget-title">Database Settings (Supabase)</span>
+          <span id="supabaseStatus" style="font-size:.62rem;letter-spacing:.08em;color:var(--text-lo)">Not connected</span>
+        </div>
+        <div class="widget-body">
+          <p style="font-size:.75rem;color:var(--text-lo);line-height:1.7;margin-bottom:1.4rem">
+            Connect a Supabase project to store listings, agents, and testimonials in the cloud — persisting across devices and sessions. Images will be stored in Supabase Storage.
+          </p>
+          <div class="form-grid" style="grid-template-columns:1fr">
+            <div class="form-group">
+              <label class="form-label">Project URL</label>
+              <input class="form-input" type="url" id="sb-url" placeholder="https://xxxx.supabase.co" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Anon / Public API Key</label>
+              <input class="form-input" type="password" id="sb-key" placeholder="eyJ…" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Storage Bucket Name</label>
+              <input class="form-input" type="text" id="sb-bucket" placeholder="maison-images" value="maison-images" />
+            </div>
+          </div>
+          <div style="font-size:.68rem;color:var(--text-lo);margin:.8rem 0 1.4rem;line-height:1.7">
+            Required tables: <code style="color:var(--gold-lt);background:var(--surface-3);padding:.1rem .4rem">maison_listings</code>
+            <code style="color:var(--gold-lt);background:var(--surface-3);padding:.1rem .4rem">maison_agents</code>
+            <code style="color:var(--gold-lt);background:var(--surface-3);padding:.1rem .4rem">maison_testimonials</code> — each with a <code style="color:var(--gold-lt);background:var(--surface-3);padding:.1rem .4rem">data</code> jsonb column and numeric <code style="color:var(--gold-lt);background:var(--surface-3);padding:.1rem .4rem">listing_id</code>.
+          </div>
+          <hr class="section-divider" />
+          <div style="display:flex;gap:.8rem;justify-content:flex-end">
+            <button class="topbar-btn secondary" onclick="testSupabase()">Test Connection</button>
+            <button class="topbar-btn" onclick="saveSupabaseConfig()">Save & Connect</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- ═══════════════════════════════════════════════════════
+     LISTING MODAL
+═══════════════════════════════════════════════════════ -->
+<div class="overlay" id="listingOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="listingModalTitle">New Listing</div>
+      <button class="modal-close" onclick="closeListingModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-tabs">
+        <button class="form-tab active" onclick="switchTab(this,'tab-details')">Details</button>
+        <button class="form-tab" onclick="switchTab(this,'tab-images')">Images</button>
+        <button class="form-tab" onclick="switchTab(this,'tab-meta')">Specs</button>
+      </div>
+
+      <!-- Tab: Details -->
+      <div class="tab-pane active" id="tab-details">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Property Name *</label>
+            <input class="form-input" type="text" id="l-name" placeholder="e.g. Villa Lumière" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Location *</label>
+            <input class="form-input" type="text" id="l-location" placeholder="e.g. Côte d'Azur · France" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Price *</label>
+            <input class="form-input" type="text" id="l-price" placeholder="e.g. € 12,800,000" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Status</label>
+            <select class="form-select" id="l-status">
+              <option value="active">Active</option>
+              <option value="reduced">Reduced</option>
+              <option value="soon">Coming Soon</option>
+              <option value="sold">Sold</option>
+            </select>
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Tagline / Pull Quote</label>
+            <input class="form-input" type="text" id="l-tagline" placeholder="e.g. A sanctuary of light, stone and sea…" />
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Description — Paragraph 1</label>
+            <textarea class="form-textarea" id="l-desc" rows="4" placeholder="First paragraph describing the property…"></textarea>
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Description — Paragraph 2</label>
+            <textarea class="form-textarea" id="l-desc2" rows="4" placeholder="Second paragraph (optional)…"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Price Note</label>
+            <input class="form-input" type="text" id="l-pricenote" placeholder="e.g. Guide price, excl. notary fees" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Sub-location</label>
+            <input class="form-input" type="text" id="l-sublocation" placeholder="e.g. Cap Ferrat peninsula" />
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Location Note (distances / transport)</label>
+            <input class="form-input" type="text" id="l-locnote" placeholder="e.g. 12 min from airport · 25 min from Monaco" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: Images -->
+      <div class="tab-pane" id="tab-images">
+        <div class="upload-zone" id="uploadZone">
+          <input type="file" id="imageUpload" multiple accept="image/*" onchange="handleImageUpload(event)" />
+          <div class="upload-icon">⬆</div>
+          <div class="upload-label">Upload Photos</div>
+          <div class="upload-sub">Click to browse or drag &amp; drop · JPG, PNG, WEBP</div>
+        </div>
+        <div class="upload-progress" id="uploadProgress">
+          <div class="upload-progress-bar" id="uploadProgressBar"></div>
+        </div>
+        <div class="upload-status" id="uploadStatus"></div>
+        <div class="image-previews" id="imagePreviews"></div>
+        <div style="margin-top:1.2rem">
+          <label class="form-label" style="display:block;margin-bottom:.5rem">Or use image URL</label>
+          <div style="display:flex;gap:.7rem">
+            <input class="form-input" type="url" id="imgUrlInput" placeholder="https://…" style="flex:1" />
+            <button class="topbar-btn secondary" onclick="addImageFromUrl()">Add</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: Specs -->
+      <div class="tab-pane" id="tab-meta">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Bedrooms</label>
+            <input class="form-input" type="number" id="l-beds" placeholder="e.g. 5" min="0" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Bathrooms</label>
+            <input class="form-input" type="number" id="l-baths" placeholder="e.g. 4" min="0" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Living Area (m² or sq ft)</label>
+            <input class="form-input" type="text" id="l-area" placeholder="e.g. 762m² or 8,200" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Plot / Land Size</label>
+            <input class="form-input" type="text" id="l-plot" placeholder="e.g. 3,200m² or 14 acres" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Market / City</label>
+            <input class="form-input" type="text" id="l-market" placeholder="e.g. London" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Year Built</label>
+            <input class="form-input" type="text" id="l-year" placeholder="e.g. 2018" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Badge Label</label>
+            <input class="form-input" type="text" id="l-badge" placeholder="e.g. New · Reduced · Coming Soon" />
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Key Features (one per line)</label>
+            <textarea class="form-textarea" id="l-features" placeholder="Infinity pool&#10;Private helipad&#10;Wine cellar"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="topbar-btn secondary" onclick="closeListingModal()">Cancel</button>
+      <button class="topbar-btn" onclick="saveListing()">Save Listing</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     AGENT MODAL
+═══════════════════════════════════════════════════════ -->
+<div class="overlay" id="agentOverlay">
+  <div class="modal" style="max-width:560px">
+    <div class="modal-header">
+      <div class="modal-title" id="agentModalTitle">New Agent</div>
+      <button class="modal-close" onclick="closeAgentModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div style="display:flex;gap:1.5rem;align-items:flex-start;margin-bottom:1.8rem">
+        <div style="flex-shrink:0">
+          <div style="width:90px;height:90px;background:var(--surface-3);border:1px solid var(--border);overflow:hidden;position:relative">
+            <img id="agentPhotoPreview" src="" style="width:100%;height:100%;object-fit:cover;display:none" />
+            <div id="agentPhotoEmpty" style="width:100%;height:100%;display:grid;place-items:center;font-size:2rem;color:var(--surface-4)">👤</div>
+          </div>
+          <div style="margin-top:.6rem">
+            <label style="display:block">
+              <input type="file" id="agentPhotoUpload" accept="image/*" onchange="handleAgentPhoto(event)" style="display:none" />
+              <span class="btn-icon" style="display:block;text-align:center;cursor:pointer" onclick="document.getElementById('agentPhotoUpload').click()">Upload</span>
+            </label>
+          </div>
+          <div style="margin-top:.4rem">
+            <input class="form-input" type="url" id="agentPhotoUrl" placeholder="Or paste URL" style="font-size:.7rem;padding:.5rem" oninput="previewAgentPhotoUrl(this.value)" />
+          </div>
+        </div>
+        <div style="flex:1">
+          <div class="form-grid" style="grid-template-columns:1fr;gap:1rem">
+            <div class="form-group">
+              <label class="form-label">Full Name *</label>
+              <input class="form-input" type="text" id="a-name" placeholder="e.g. Sophie Laurent" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Title / Role</label>
+              <input class="form-input" type="text" id="a-title" placeholder="e.g. Senior Advisor" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Market Focus</label>
+              <input class="form-input" type="text" id="a-market" placeholder="e.g. Paris · London" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input class="form-input" type="email" id="a-email" placeholder="agent@maisonrealty.com" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Phone</label>
+          <input class="form-input" type="tel" id="a-phone" placeholder="+44 …" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Properties Sold</label>
+          <input class="form-input" type="number" id="a-sold" placeholder="e.g. 42" min="0" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Years Experience</label>
+          <input class="form-input" type="number" id="a-years" placeholder="e.g. 12" min="0" />
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Bio</label>
+          <textarea class="form-textarea" id="a-bio" placeholder="A brief description of the agent's expertise and background…"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="topbar-btn secondary" onclick="closeAgentModal()">Cancel</button>
+      <button class="topbar-btn" onclick="saveAgent()">Save Agent</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     TESTIMONIAL MODAL
+═══════════════════════════════════════════════════════ -->
+<div class="overlay" id="testimonialOverlay">
+  <div class="modal" style="max-width:540px">
+    <div class="modal-header">
+      <div class="modal-title" id="testimonialModalTitle">New Testimonial</div>
+      <button class="modal-close" onclick="closeTestimonialModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid" style="grid-template-columns:1fr">
+        <div class="form-group">
+          <label class="form-label">Quote *</label>
+          <textarea class="form-textarea" id="t-quote" style="min-height:120px" placeholder="The client's words…"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Author *</label>
+          <input class="form-input" type="text" id="t-author" placeholder="e.g. Isabelle & Marc Fontaine" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Location & Year</label>
+          <input class="form-input" type="text" id="t-location" placeholder="e.g. Paris, 2024" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Rating</label>
+          <select class="form-select" id="t-rating">
+            <option value="5">★★★★★ — 5 Stars</option>
+            <option value="4">★★★★☆ — 4 Stars</option>
+            <option value="3">★★★☆☆ — 3 Stars</option>
+          </select>
+        </div>
+        <div class="form-group" style="flex-direction:row;align-items:center;gap:.8rem">
+          <input type="checkbox" id="t-featured" style="accent-color:var(--gold);width:15px;height:15px" />
+          <label class="form-label" for="t-featured" style="cursor:pointer;letter-spacing:.15em">Feature on homepage</label>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="topbar-btn secondary" onclick="closeTestimonialModal()">Cancel</button>
+      <button class="topbar-btn" onclick="saveTestimonial()">Save Testimonial</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     CONFIRM DIALOG
+═══════════════════════════════════════════════════════ -->
+<div class="overlay" id="confirmOverlay">
+  <div class="confirm-modal">
+    <div class="confirm-title" id="confirmTitle">Are you sure?</div>
+    <div class="confirm-body" id="confirmBody">This action cannot be undone.</div>
+    <div class="confirm-actions">
+      <button class="topbar-btn secondary" onclick="closeConfirm()">Cancel</button>
+      <button class="btn-danger" id="confirmOkBtn">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOASTS -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ═══════════════════════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════════════════════ -->
+<script>
+  /* ════════════════════════════════════════════
+     AUTH — Password Protection (Supabase-backed)
+  ════════════════════════════════════════════ */
+  const AUTH_KEY   = 'maison_auth_token';
+  const DEFAULT_PW = 'Testweb1';
+  let   _cachedPw  = null;
+
+  async function getStoredPw() {
+    if (_cachedPw) return _cachedPw;
+    try {
+      const rows = await sbFetch('settings?key=eq.admin_password&select=value&limit=1');
+      if (Array.isArray(rows) && rows[0]) {
+        _cachedPw = rows[0].value;
+        return _cachedPw;
+      }
+    } catch(e) { /* fall through to default */ }
+    return DEFAULT_PW;
+  }
+
+  function isAuthenticated() {
+    return sessionStorage.getItem(AUTH_KEY) === 'authenticated';
+  }
+
+  async function submitLogin() {
+    const pw  = document.getElementById('loginPassword').value;
+    const btn = document.getElementById('loginBtn');
+    if (btn) { btn.disabled = true; btn.textContent = 'Checking…'; }
+    const stored = await getStoredPw();
+    if (pw === stored) {
+      sessionStorage.setItem(AUTH_KEY, 'authenticated');
+      document.getElementById('loginScreen').classList.add('hidden');
+      initApp();
+    } else {
+      document.getElementById('loginError').textContent = 'Incorrect password. Please try again.';
+      document.getElementById('loginPassword').value = '';
+      document.getElementById('loginPassword').focus();
+    }
+    if (btn) { btn.disabled = false; btn.textContent = 'Enter'; }
+  }
+
+  function logout() {
+    sessionStorage.removeItem(AUTH_KEY);
+    _cachedPw = null;
+    location.reload();
+  }
+
+  async function changePassword() {
+    const current = document.getElementById('pw-current').value;
+    const newPw   = document.getElementById('pw-new').value;
+    const confirm = document.getElementById('pw-confirm').value;
+    const stored  = await getStoredPw();
+    if (current !== stored)   { showToast('Current password is incorrect', 'danger'); return; }
+    if (newPw.length < 8)     { showToast('New password must be at least 8 characters', 'danger'); return; }
+    if (newPw !== confirm)    { showToast('Passwords do not match', 'danger'); return; }
+    try {
+      const existing = await sbFetch('settings?key=eq.admin_password&select=key&limit=1');
+      if (Array.isArray(existing) && existing.length > 0) {
+        await sbFetch('settings?key=eq.admin_password', 'PATCH', { value: newPw });
+      } else {
+        await sbFetch('settings', 'POST', { key: 'admin_password', value: newPw });
+      }
+      _cachedPw = newPw;
+      document.getElementById('pw-current').value = '';
+      document.getElementById('pw-new').value     = '';
+      document.getElementById('pw-confirm').value = '';
+      showToast('Password updated successfully', 'success');
+    } catch(e) {
+      showToast('Failed to save password: ' + e.message, 'danger');
+    }
+  }
+
+  /* ════════════════════════════════════════════
+     SUPABASE — pre-configured, no manual setup needed
+  ════════════════════════════════════════════ */
+  // Config is hardcoded above in sbFetch helpers
+  let sbConfig = true; // truthy sentinel kept for any legacy checks
+
+  function loadSupabaseConfig() { return true; }
+
+  function updateSupabaseUI() {
+    const banner = document.getElementById('supabaseBanner');
+    const status = document.getElementById('supabaseStatus');
+    if (banner) banner.classList.add('hidden');
+    if (status) { status.textContent = '● Connected'; status.style.color = 'var(--success)'; }
+  }
+
+  /* ─── Supabase REST helpers (wired to real properties table) ─── */
+  const SUPA_URL = 'https://xqucpjnjbwohppvorcox.supabase.co';
+  const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVWVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhxdWNwam5qYndvaHBwdm9yY294Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NTI4OTksImV4cCI6MjA4ODEyODg5OX0.DP38R5szFsITEQIlr1u4OCF3pJzDYbrZjdT4Cz3bAoM';
+  // Use the real anon key
+  const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhxdWNwam5qYndvaHBwdm9yY294Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1NTI4OTksImV4cCI6MjA4ODEyODg5OX0.DP38R5szFsITEQIlr1u4OCF3pJzDYbrZjdT4Cz3bAoM';
+
+  async function sbFetch(path, method = 'GET', body = null) {
+    const headers = {
+      'apikey': ANON_KEY,
+      'Authorization': `Bearer ${ANON_KEY}`,
+      'Content-Type': 'application/json',
+      'Prefer': method === 'POST' ? 'return=representation' : (method === 'PATCH' ? 'return=representation' : ''),
+    };
+    const res = await fetch(`${SUPA_URL}/rest/v1/${path}`, {
+      method, headers, body: body ? JSON.stringify(body) : undefined
+    });
+    if (!res.ok) throw new Error(await res.text());
+    return (method === 'DELETE') ? null : res.json();
+  }
+
+  // Map internal admin format ↔ Supabase properties schema
+  function toSupabase(l) {
+    return {
+      title: l.name,
+      description: [l.tagline, l.desc, l.desc2].filter(Boolean).join('\n\n'),
+      price: parseFloat(String(l.price||'0').replace(/[^0-9.]/g,'')) || 0,
+      price_display: l.price,
+      currency: l.price ? (l.price.startsWith('£')?'GBP':l.price.startsWith('€')?'EUR':l.price.startsWith('¥')?'JPY':l.price.startsWith('CHF')?'CHF':'USD') : 'USD',
+      location: l.location,
+      city: l.sublocation || l.market || '',
+      country: (l.location||'').split('·').pop().trim(),
+      bedrooms: parseInt(l.beds)||0,
+      bathrooms: parseInt(l.baths)||0,
+      square_meters: parseFloat(String(l.area||'').replace(/[^0-9.]/g,'')) || null,
+      property_type: l.type ? l.type.toLowerCase() : 'house',
+      status: l.status === 'active' ? 'available' : l.status === 'reduced' ? 'available' : l.status === 'soon' ? 'off_market' : l.status || 'available',
+      featured: !!l.featured,
+      badge: l.badge||'',
+      images: l.imgs||[],
+      amenities: (l.features||'').split('\n').map(s=>s.trim()).filter(Boolean),
+      sort_order: l.id || null,
+    };
+  }
+
+  function fromSupabase(r) {
+    const desc = r.description||'';
+    const parts = desc.split('\n\n');
+    return {
+      id: r.id, name: r.title,
+      location: r.location, sublocation: r.city||'', market: r.city||'',
+      price: r.price_display||String(r.price),
+      pricenote: '', status: r.status==='available'?'active':r.status==='off_market'?'soon':r.status,
+      beds: r.bedrooms||0, baths: r.bathrooms||0,
+      area: r.square_meters ? r.square_meters+'m²' : '',
+      plot: '', year: '',
+      badge: r.badge||'', featured: r.featured||false,
+      tagline: parts[0]||'', desc: parts[1]||'', desc2: parts[2]||'',
+      locnote: '', type: r.property_type||'house',
+      features: Array.isArray(r.amenities) ? r.amenities.join('\n') : '',
+      imgs: r.images||[],
+    };
+  }
+
+  async function sbLoadAll() {
+    try {
+      const rows = await sbFetch('properties?select=*&order=sort_order.asc,created_at.asc');
+      return Array.isArray(rows) ? rows.map(fromSupabase) : [];
+    } catch(e) { console.warn('Supabase load failed:', e); return null; }
+  }
+
+  async function sbSaveListing(listing) {
+    try {
+      const data = toSupabase(listing);
+      if (listing._supaId) {
+        // Update existing
+        await sbFetch(`properties?id=eq.${listing._supaId}`, 'PATCH', data);
+      } else {
+        // Insert new
+        const result = await sbFetch('properties', 'POST', data);
+        if (Array.isArray(result) && result[0]) listing._supaId = result[0].id;
+      }
+    } catch(e) { console.warn('Supabase save failed:', e); throw e; }
+  }
+
+  async function sbDeleteListing(supaId) {
+    if (!supaId) return;
+    try { await sbFetch(`properties?id=eq.${supaId}`, 'DELETE'); }
+    catch(e) { console.warn('Supabase delete failed:', e); }
+  }
+
+  /* ─── Image upload to Supabase Storage ─── */
+  async function uploadImageToSupabase(file) {
+    const bucket = 'property-images';
+    const ext  = file.name.split('.').pop();
+    const name = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+    const res  = await fetch(
+      `${SUPA_URL}/storage/v1/object/${bucket}/${name}`,
+      {
+        method: 'POST',
+        headers: {
+          'apikey': ANON_KEY,
+          'Authorization': `Bearer ${ANON_KEY}`,
+          'Content-Type': file.type,
+          'x-upsert': 'true',
+        },
+        body: file,
+      }
+    );
+    if (!res.ok) throw new Error('Image upload failed: ' + await res.text());
+    return `${SUPA_URL}/storage/v1/object/public/${bucket}/${name}`;
+  }
+
+  // Legacy no-op stubs (keeps rest of admin code compatible)
+  function saveSupabaseConfig() { showToast('Supabase is pre-configured ✓', 'success'); }
+  function testSupabase() { sbLoadAll().then(r=>showToast(r?'Connection successful ✓':'Failed','success')).catch(()=>showToast('Connection failed','danger')); }
+  function updateSupabaseUI() {
+    const banner = document.getElementById('supabaseBanner');
+    const status = document.getElementById('supabaseStatus');
+    if (banner) banner.classList.add('hidden');
+    if (status) { status.textContent = '● Connected'; status.style.color = 'var(--success)'; }
+  }
+
+
+
+  /* ════════════════════════════════════════════
+     DATA STORE — Supabase backed
+  ════════════════════════════════════════════ */
+
+  function loadListings() { return null; } // unused, kept for compat
+  function saveListingsToStorage() {} // no-op, we save to Supabase directly
+
+  async function saveListingCloud(listing) {
+    await sbSaveListing(listing);
+  }
+
+  async function deleteListingCloud(id) {
+    const l = listings.find(x => x.id === id);
+    if (l && l._supaId) await sbDeleteListing(l._supaId);
+  }
+
+
+
+  /* ════════════════════════════════════════════
+     SEED DATA
+  ════════════════════════════════════════════ */
+  // listings loaded from Supabase in initApp()
+  let listings = [];
+
+  let agents = [
+    { id: 1, name: 'Sophie Laurent',   title: 'Senior Advisor',       market: 'Paris · London',   email: 'sophie@maisonrealty.com', phone: '+33 1 23 45 67',  sold: 48, years: 14, bio: 'Sophie brings a refined eye and twenty years of expertise across the Paris and London markets, specialising in period properties and off-market opportunities.', photo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300&q=70' },
+    { id: 2, name: 'James Hartwell',   title: 'Principal Advisor',    market: 'London · Geneva',  email: 'james@maisonrealty.com',  phone: '+44 20 1234 56',  sold: 63, years: 18, bio: 'A trusted authority on prime London and Swiss property for nearly two decades, James is known for his discretion and exceptional attention to detail.', photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&q=70' },
+    { id: 3, name: 'Yuki Nishida',     title: 'Asia-Pacific Director', market: 'Tokyo · Singapore', email: 'yuki@maisonrealty.com',  phone: '+81 3 1234 5678', sold: 35, years: 11, bio: 'Yuki leads our Asia-Pacific division, offering clients unparalleled access to exclusive properties across Japan and South-East Asia.', photo: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=300&q=70' },
+  ];
+
+
+  let testimonials = [
+    { id: 1, quote: "Maison found us a home we hadn't even known to imagine. The process felt less like a property search and more like an act of revelation.", author: 'Isabelle & Marc Fontaine', location: 'Paris, 2024', rating: 5, featured: true },
+    { id: 2, quote: "In thirty years of investing, I have never experienced service at this level. Every detail was attended to with care and intelligence.", author: 'James Hartwell', location: 'London, 2023', rating: 5, featured: true },
+    { id: 3, quote: "They understood what we needed before we did. The home they found us is beyond what we thought possible.", author: 'Yuki & Kenji Nishida', location: 'Tokyo, 2024', rating: 5, featured: true },
+  ];
+
+  let editingListingId     = null;
+  let editingAgentId       = null;
+  let editingTestimonialId = null;
+  let pendingImages        = [];  // array of { type: 'url'|'file', value: string|File }
+  let confirmCallback      = null;
+
+  /* ════════════════════════════════════════════
+     APP INIT
+  ════════════════════════════════════════════ */
+  async function initApp() {
+    updateSupabaseUI();
+    // Always load from Supabase
+    showToast('Loading listings…', 'info');
+    try {
+      const rows = await sbLoadAll();
+      if (rows !== null) {
+        listings = rows;
+        // Store _supaId for each listing (the real UUID)
+        listings.forEach((l, i) => { if (!l._supaId) l._supaId = l.id; l.id = i + 1; });
+      }
+    } catch(e) {
+      showToast('Could not load from Supabase: ' + e.message, 'danger');
+    }
+    renderDashboard();
+    renderListings();
+    setupDragDrop();
+  }
+
+
+  /* ─── NAV ─── */
+  function switchPanel(name, el) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('panel-' + name).classList.add('active');
+    el.classList.add('active');
+
+    const titles  = { dashboard: 'Dashboard', listings: 'Listings', agents: 'Agents', testimonials: 'Testimonials', settings: 'Site Settings' };
+    const actions = { dashboard: null, listings: '+ New Listing', agents: '+ New Agent', testimonials: '+ New Testimonial', settings: null };
+    document.getElementById('topbarTitle').textContent = titles[name];
+    const btn = document.getElementById('topbarAction');
+    if (actions[name]) { btn.style.display = ''; btn.textContent = actions[name]; }
+    else { btn.style.display = 'none'; }
+
+    if (name === 'listings')     renderListings();
+    if (name === 'agents')       renderAgents();
+    if (name === 'testimonials') renderTestimonials();
+    if (name === 'dashboard')    renderDashboard();
+  }
+
+  function topbarActionClick() {
+    const active = document.querySelector('.nav-item.active').dataset.panel;
+    if (active === 'listings')    openListingModal();
+    if (active === 'agents')      openAgentModal();
+    if (active === 'testimonials') openTestimonialModal();
+  }
+
+  function viewSite() { showToast('Opening site in new tab…'); }
+
+  /* ─── DASHBOARD ─── */
+  function renderDashboard() {
+    const active = listings.filter(l => l.status === 'active' || l.status === 'reduced').length;
+    document.getElementById('dash-active').textContent = active;
+    document.getElementById('dash-agents').textContent = agents.length;
+    document.getElementById('dash-testimonials').textContent = testimonials.length;
+    document.getElementById('listingsBadge').textContent = listings.length;
+
+    const counts = { active: 0, sold: 0, soon: 0, reduced: 0 };
+    listings.forEach(l => { if (counts[l.status] !== undefined) counts[l.status]++; });
+    document.getElementById('dash-pill-active').textContent  = counts.active  + ' Active';
+    document.getElementById('dash-pill-sold').textContent    = counts.sold    + ' Sold';
+    document.getElementById('dash-pill-soon').textContent    = counts.soon    + ' Coming Soon';
+    document.getElementById('dash-pill-reduced').textContent = counts.reduced + ' Reduced';
+
+    const prev = document.getElementById('dash-listing-preview');
+    prev.innerHTML = listings.slice(0,3).map(l => `
+      <div style="display:flex;align-items:center;gap:1rem;padding:.7rem 0;border-bottom:1px solid var(--border)">
+        <img src="${l.imgs[0]||''}" style="width:48px;height:34px;object-fit:cover;flex-shrink:0;background:var(--surface-3)" />
+        <div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:.95rem;color:var(--text-hi)">${l.name}</div>
+          <div style="font-size:.65rem;color:var(--text-lo)">${l.location}</div>
+        </div>
+        <div style="margin-left:auto;font-size:.72rem;color:var(--text-mid)">${l.price}</div>
+      </div>
+    `).join('');
+  }
+
+  /* ─── LISTINGS ─── */
+  let listingsFilter = { search: '', status: '' };
+
+  function renderListings() {
+    const tbody = document.getElementById('listingsTbody');
+    const filtered = listings.filter(l => {
+      const q = listingsFilter.search.toLowerCase();
+      const matchSearch = !q || l.name.toLowerCase().includes(q) || l.location.toLowerCase().includes(q) || l.market.toLowerCase().includes(q);
+      const matchStatus = !listingsFilter.status || l.status === listingsFilter.status;
+      return matchSearch && matchStatus;
+    });
+    if (!filtered.length) {
+      tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:3rem;color:var(--text-lo)">No listings found</td></tr>`;
+      return;
+    }
+    tbody.innerHTML = filtered.map(l => `
+      <tr>
+        <td><img class="listing-thumb" src="${l.imgs[0]||'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22/>'}" alt="" onerror="this.style.background='var(--surface-3)';this.src=''" /></td>
+        <td>
+          <div class="listing-name">${l.name}</div>
+          <div class="listing-location">${l.location}</div>
+        </td>
+        <td style="font-family:'Cormorant Garamond',serif;font-size:1rem;color:var(--text-hi)">${l.price}</td>
+        <td><span class="status-badge ${l.status}">${statusLabel(l.status)}</span></td>
+        <td>${l.beds || '—'}</td>
+        <td>${l.market || '—'}</td>
+        <td>
+          <div class="action-btns">
+            <button class="btn-icon" onclick="openListingModal(${l.id})">Edit</button>
+            <button class="btn-icon" onclick="previewListing(${l.id})">Preview ↗</button>
+            <button class="btn-icon danger" onclick="confirmDelete('listing',${l.id})">Delete</button>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  function statusLabel(s) {
+    return { active: 'Active', reduced: 'Reduced', soon: 'Coming Soon', sold: 'Sold' }[s] || s;
+  }
+
+  function previewListing(id) {
+    try { localStorage.setItem('maison_preview_id', id); } catch(e) {}
+    window.open('property.html', '_blank');
+  }
+
+  function filterListings(v)         { listingsFilter.search = v; renderListings(); }
+  function filterListingsByStatus(v) { listingsFilter.status = v; renderListings(); }
+
+  /* ─── LISTING MODAL ─── */
+  function openListingModal(id) {
+    editingListingId = id || null;
+    pendingImages = [];
+    document.getElementById('imagePreviews').innerHTML = '';
+    document.getElementById('imgUrlInput').value = '';
+    document.getElementById('uploadStatus').textContent = '';
+    document.getElementById('uploadProgress').classList.remove('active');
+    const modal = document.getElementById('listingModalTitle');
+    modal.textContent = id ? 'Edit Listing' : 'New Listing';
+
+    document.querySelectorAll('.form-tab').forEach((t,i) => t.classList.toggle('active', i===0));
+    document.querySelectorAll('.tab-pane').forEach((p,i) => p.classList.toggle('active', i===0));
+
+    if (id) {
+      const l = listings.find(x => x.id === id);
+      document.getElementById('l-name').value        = l.name;
+      document.getElementById('l-location').value    = l.location;
+      document.getElementById('l-sublocation').value = l.sublocation || '';
+      document.getElementById('l-price').value       = l.price;
+      document.getElementById('l-pricenote').value   = l.pricenote || '';
+      document.getElementById('l-status').value      = l.status;
+      document.getElementById('l-tagline').value     = l.tagline || '';
+      document.getElementById('l-desc').value        = l.desc;
+      document.getElementById('l-desc2').value       = l.desc2 || '';
+      document.getElementById('l-locnote').value     = l.locnote || '';
+      document.getElementById('l-beds').value        = l.beds;
+      document.getElementById('l-baths').value       = l.baths;
+      document.getElementById('l-area').value        = l.area;
+      document.getElementById('l-plot').value        = l.plot || '';
+      document.getElementById('l-market').value      = l.market;
+      document.getElementById('l-year').value        = l.year;
+      document.getElementById('l-badge').value       = l.badge;
+      document.getElementById('l-features').value   = l.features;
+      // pendingImages are URL strings for existing images
+      pendingImages = l.imgs.map(src => ({ type: 'url', value: src }));
+      renderImagePreviews();
+    } else {
+      ['l-name','l-location','l-sublocation','l-price','l-pricenote','l-tagline','l-desc','l-desc2','l-locnote','l-beds','l-baths','l-area','l-plot','l-market','l-year','l-badge','l-features'].forEach(id => {
+        const el = document.getElementById(id); if (el) el.value = '';
+      });
+      document.getElementById('l-status').value = 'active';
+    }
+    document.getElementById('listingOverlay').classList.add('open');
+  }
+
+  function closeListingModal() {
+    document.getElementById('listingOverlay').classList.remove('open');
+    editingListingId = null;
+  }
+
+  async function saveListing() {
+    const name = document.getElementById('l-name').value.trim();
+    if (!name) { showToast('Property name is required', 'danger'); return; }
+
+    // Upload any pending file images
+    const btn = document.querySelector('#listingOverlay .topbar-btn:not(.secondary)');
+    btn.textContent = 'Saving…'; btn.disabled = true;
+
+    let resolvedImages = [];
+    const fileItems = pendingImages.filter(p => p.type === 'file');
+    const urlItems  = pendingImages.filter(p => p.type === 'url');
+
+    if (fileItems.length) {
+      setUploadStatus(`Uploading ${fileItems.length} image(s)…`, 0);
+      for (let i = 0; i < fileItems.length; i++) {
+        try {
+          const url = await uploadImageToSupabase(fileItems[i].value);
+          resolvedImages.push(url);
+          setUploadStatus(`Uploaded ${i+1}/${fileItems.length}`, ((i+1)/fileItems.length)*100);
+        } catch(e) {
+          resolvedImages.push(await fileToBase64(fileItems[i].value));
+          showToast('Image stored as base64 (Storage upload failed)', 'danger');
+        }
+      }
+    }
+
+    const imgs = [...urlItems.map(p => p.value), ...resolvedImages];
+
+    const data = {
+      name,
+      location:    document.getElementById('l-location').value.trim(),
+      sublocation: document.getElementById('l-sublocation').value.trim(),
+      price:       document.getElementById('l-price').value.trim(),
+      pricenote:   document.getElementById('l-pricenote').value.trim(),
+      status:      document.getElementById('l-status').value,
+      tagline:     document.getElementById('l-tagline').value.trim(),
+      desc:        document.getElementById('l-desc').value.trim(),
+      desc2:       document.getElementById('l-desc2').value.trim(),
+      locnote:     document.getElementById('l-locnote').value.trim(),
+      beds:        document.getElementById('l-beds').value,
+      baths:       document.getElementById('l-baths').value,
+      area:        document.getElementById('l-area').value.trim(),
+      plot:        document.getElementById('l-plot').value.trim(),
+      market:      document.getElementById('l-market').value.trim(),
+      year:        document.getElementById('l-year').value.trim(),
+      badge:       document.getElementById('l-badge').value.trim(),
+      features:    document.getElementById('l-features').value.trim(),
+      imgs,
+    };
+
+    if (editingListingId) {
+      const idx = listings.findIndex(l => l.id === editingListingId);
+      listings[idx] = { ...listings[idx], ...data };
+      await saveListingCloud(listings[idx]);
+      showToast(`"${name}" updated`, 'success');
+    } else {
+      data.id = Date.now();
+      listings.push(data);
+      await saveListingCloud(data);
+      showToast(`"${name}" added`, 'success');
+    }
+
+    saveListingsToStorage();
+    btn.textContent = 'Save Listing'; btn.disabled = false;
+    setUploadStatus('', 0);
+    document.getElementById('uploadProgress').classList.remove('active');
+    closeListingModal();
+    renderListings();
+    renderDashboard();
+    document.getElementById('listingsBadge').textContent = listings.length;
+  }
+
+  function setUploadStatus(msg, pct) {
+    const status = document.getElementById('uploadStatus');
+    const bar    = document.getElementById('uploadProgressBar');
+    const prog   = document.getElementById('uploadProgress');
+    status.textContent = msg;
+    if (pct > 0) { prog.classList.add('active'); bar.style.width = pct + '%'; }
+    else { bar.style.width = '0%'; }
+  }
+
+  function fileToBase64(file) {
+    return new Promise(res => {
+      const r = new FileReader();
+      r.onload = e => res(e.target.result);
+      r.readAsDataURL(file);
+    });
+  }
+
+  /* ─── IMAGE HANDLING ─── */
+  function setupDragDrop() {
+    const zone = document.getElementById('uploadZone');
+    if (!zone) return;
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.style.borderColor = 'var(--gold)'; });
+    zone.addEventListener('dragleave', () => { zone.style.borderColor = ''; });
+    zone.addEventListener('drop', e => {
+      e.preventDefault(); zone.style.borderColor = '';
+      const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'));
+      files.forEach(f => { pendingImages.push({ type: 'file', value: f }); });
+      renderImagePreviews();
+    });
+  }
+
+  function handleImageUpload(e) {
+    const files = Array.from(e.target.files);
+    files.forEach(f => { pendingImages.push({ type: 'file', value: f }); });
+    renderImagePreviews();
+    e.target.value = '';
+  }
+
+  function addImageFromUrl() {
+    const url = document.getElementById('imgUrlInput').value.trim();
+    if (!url) return;
+    pendingImages.push({ type: 'url', value: url });
+    renderImagePreviews();
+    document.getElementById('imgUrlInput').value = '';
+  }
+
+  function renderImagePreviews() {
+    const container = document.getElementById('imagePreviews');
+    container.innerHTML = pendingImages.map((item, i) => {
+      const src = item.type === 'file' ? URL.createObjectURL(item.value) : item.value;
+      const tag = item.type === 'file'
+        ? `<span style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.55);font-size:.5rem;letter-spacing:.08em;text-align:center;padding:.15rem;color:var(--gold-lt)">LOCAL</span>`
+        : '';
+      return `<div class="preview-thumb">
+        <img src="${src}" alt="" />
+        ${tag}
+        <button class="preview-remove" onclick="removeImage(${i})">✕</button>
+      </div>`;
+    }).join('');
+    const count = document.getElementById('uploadStatus');
+    if (count) count.textContent = pendingImages.length ? `${pendingImages.length} image(s) queued` : '';
+  }
+
+  function removeImage(i) {
+    pendingImages.splice(i, 1);
+    renderImagePreviews();
+  }
+
+  function switchTab(btn, targetId) {
+    btn.closest('.modal-body').querySelectorAll('.form-tab').forEach(t => t.classList.remove('active'));
+    btn.closest('.modal-body').querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(targetId).classList.add('active');
+  }
+
+  /* ─── AGENTS ─── */
+  let agentsFilter = '';
+  function filterAgents(v) { agentsFilter = v.toLowerCase(); renderAgents(); }
+
+  function renderAgents() {
+    const grid = document.getElementById('agentsGrid');
+    const filtered = agents.filter(a =>
+      !agentsFilter || a.name.toLowerCase().includes(agentsFilter) || a.market.toLowerCase().includes(agentsFilter)
+    );
+    grid.innerHTML = filtered.map(a => `
+      <div class="agent-card">
+        <div class="agent-photo-wrap">
+          ${a.photo
+            ? `<img class="agent-photo" src="${a.photo}" alt="${a.name}" />`
+            : `<div class="agent-photo-placeholder"><span>${a.name.charAt(0)}</span></div>`
+          }
+        </div>
+        <div class="agent-body">
+          <div class="agent-name">${a.name}</div>
+          <div class="agent-title">${a.title}</div>
+          <div class="agent-bio">${a.bio.length > 120 ? a.bio.slice(0,120)+'…' : a.bio}</div>
+          <div class="agent-meta">
+            <div class="agent-meta-item"><strong>${a.sold}</strong> Sold</div>
+            <div class="agent-meta-item"><strong>${a.years} yrs</strong> Experience</div>
+            <div class="agent-meta-item" style="margin-left:auto;font-size:.62rem">${a.market}</div>
+          </div>
+        </div>
+        <div class="agent-actions">
+          <button class="btn-icon" style="flex:1" onclick="openAgentModal(${a.id})">Edit</button>
+          <button class="btn-icon danger" onclick="confirmDelete('agent',${a.id})">Delete</button>
+        </div>
+      </div>
+    `).join('') + `
+      <div class="add-card" onclick="openAgentModal()">
+        <div class="add-card-icon">+</div>
+        <div class="add-card-label">Add New Agent</div>
+      </div>
+    `;
+  }
+
+  /* ─── AGENT MODAL ─── */
+  function openAgentModal(id) {
+    editingAgentId = id || null;
+    document.getElementById('agentModalTitle').textContent = id ? 'Edit Agent' : 'New Agent';
+    document.getElementById('agentPhotoPreview').style.display = 'none';
+    document.getElementById('agentPhotoEmpty').style.display = 'grid';
+
+    if (id) {
+      const a = agents.find(x => x.id === id);
+      document.getElementById('a-name').value   = a.name;
+      document.getElementById('a-title').value  = a.title;
+      document.getElementById('a-market').value = a.market;
+      document.getElementById('a-email').value  = a.email;
+      document.getElementById('a-phone').value  = a.phone;
+      document.getElementById('a-sold').value   = a.sold;
+      document.getElementById('a-years').value  = a.years;
+      document.getElementById('a-bio').value    = a.bio;
+      document.getElementById('agentPhotoUrl').value = a.photo || '';
+      if (a.photo) {
+        document.getElementById('agentPhotoPreview').src = a.photo;
+        document.getElementById('agentPhotoPreview').style.display = 'block';
+        document.getElementById('agentPhotoEmpty').style.display = 'none';
+      }
+    } else {
+      ['a-name','a-title','a-market','a-email','a-phone','a-sold','a-years','a-bio'].forEach(id => {
+        document.getElementById(id).value = '';
+      });
+      document.getElementById('agentPhotoUrl').value = '';
+    }
+    document.getElementById('agentOverlay').classList.add('open');
+  }
+
+  function closeAgentModal() {
+    document.getElementById('agentOverlay').classList.remove('open');
+    editingAgentId = null;
+  }
+
+  function handleAgentPhoto(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = ev => {
+      document.getElementById('agentPhotoPreview').src = ev.target.result;
+      document.getElementById('agentPhotoPreview').style.display = 'block';
+      document.getElementById('agentPhotoEmpty').style.display = 'none';
+      document.getElementById('agentPhotoUrl').value = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function previewAgentPhotoUrl(url) {
+    if (!url) {
+      document.getElementById('agentPhotoPreview').style.display = 'none';
+      document.getElementById('agentPhotoEmpty').style.display = 'grid';
+      return;
+    }
+    document.getElementById('agentPhotoPreview').src = url;
+    document.getElementById('agentPhotoPreview').style.display = 'block';
+    document.getElementById('agentPhotoEmpty').style.display = 'none';
+  }
+
+  function saveAgent() {
+    const name = document.getElementById('a-name').value.trim();
+    if (!name) { showToast('Agent name is required', 'danger'); return; }
+    const data = {
+      name,
+      title:  document.getElementById('a-title').value.trim(),
+      market: document.getElementById('a-market').value.trim(),
+      email:  document.getElementById('a-email').value.trim(),
+      phone:  document.getElementById('a-phone').value.trim(),
+      sold:   parseInt(document.getElementById('a-sold').value) || 0,
+      years:  parseInt(document.getElementById('a-years').value) || 0,
+      bio:    document.getElementById('a-bio').value.trim(),
+      photo:  document.getElementById('agentPhotoUrl').value.trim(),
+    };
+    if (editingAgentId) {
+      const idx = agents.findIndex(a => a.id === editingAgentId);
+      agents[idx] = { ...agents[idx], ...data };
+      showToast(`${name} updated`, 'success');
+    } else {
+      data.id = Date.now();
+      agents.push(data);
+      showToast(`${name} added`, 'success');
+    }
+    closeAgentModal();
+    renderAgents();
+    renderDashboard();
+  }
+
+  /* ─── TESTIMONIALS ─── */
+  let testimonialsFilter = '';
+  function filterTestimonials(v) { testimonialsFilter = v.toLowerCase(); renderTestimonials(); }
+
+  function renderTestimonials() {
+    const list = document.getElementById('testimonialsList');
+    const filtered = testimonials.filter(t =>
+      !testimonialsFilter ||
+      t.quote.toLowerCase().includes(testimonialsFilter) ||
+      t.author.toLowerCase().includes(testimonialsFilter)
+    );
+    if (!filtered.length) {
+      list.innerHTML = `<div class="empty-state"><div class="empty-state-icon">💬</div><div class="empty-state-text">No testimonials yet</div></div>`;
+      return;
+    }
+    list.innerHTML = filtered.map((t, i) => `
+      <div class="t-card ${t.featured ? 'featured' : ''}">
+        <div>
+          <div class="t-quote">"${t.quote}"</div>
+          <div class="t-author">— ${t.author}${t.location ? ' · ' + t.location : ''}</div>
+          <div class="star-row" style="margin-top:.6rem">
+            ${[1,2,3,4,5].map(n => `<span class="star ${n <= t.rating ? '' : 'empty'}">★</span>`).join('')}
+          </div>
+          ${t.featured ? '<span style="font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-top:.5rem;display:inline-block">● Featured</span>' : ''}
+        </div>
+        <div class="t-controls">
+          <div class="action-btns" style="margin-bottom:.5rem">
+            <button class="btn-icon" onclick="openTestimonialModal(${t.id})">Edit</button>
+            <button class="btn-icon danger" onclick="confirmDelete('testimonial',${t.id})">Delete</button>
+          </div>
+          <button class="btn-icon" style="width:100%;text-align:center" onclick="toggleFeatured(${t.id})">${t.featured ? 'Unfeature' : 'Feature'}</button>
+          <div class="t-order-btns" style="width:100%;display:flex;flex-direction:row;gap:3px;margin-top:.3rem">
+            <button class="t-order-btn" style="flex:1" onclick="moveTestimonial(${t.id},-1)" ${testimonials.indexOf(t)===0?'disabled':''}>↑</button>
+            <button class="t-order-btn" style="flex:1" onclick="moveTestimonial(${t.id},1)" ${testimonials.indexOf(t)===testimonials.length-1?'disabled':''}>↓</button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function toggleFeatured(id) {
+    const t = testimonials.find(x => x.id === id);
+    t.featured = !t.featured;
+    renderTestimonials();
+    showToast(t.featured ? 'Marked as featured' : 'Removed from featured', 'success');
+  }
+
+  function moveTestimonial(id, dir) {
+    const i = testimonials.findIndex(x => x.id === id);
+    const j = i + dir;
+    if (j < 0 || j >= testimonials.length) return;
+    [testimonials[i], testimonials[j]] = [testimonials[j], testimonials[i]];
+    renderTestimonials();
+  }
+
+  /* ─── TESTIMONIAL MODAL ─── */
+  function openTestimonialModal(id) {
+    editingTestimonialId = id || null;
+    document.getElementById('testimonialModalTitle').textContent = id ? 'Edit Testimonial' : 'New Testimonial';
+    if (id) {
+      const t = testimonials.find(x => x.id === id);
+      document.getElementById('t-quote').value    = t.quote;
+      document.getElementById('t-author').value   = t.author;
+      document.getElementById('t-location').value = t.location || '';
+      document.getElementById('t-rating').value   = t.rating;
+      document.getElementById('t-featured').checked = t.featured;
+    } else {
+      document.getElementById('t-quote').value    = '';
+      document.getElementById('t-author').value   = '';
+      document.getElementById('t-location').value = '';
+      document.getElementById('t-rating').value   = '5';
+      document.getElementById('t-featured').checked = false;
+    }
+    document.getElementById('testimonialOverlay').classList.add('open');
+  }
+
+  function closeTestimonialModal() {
+    document.getElementById('testimonialOverlay').classList.remove('open');
+    editingTestimonialId = null;
+  }
+
+  function saveTestimonial() {
+    const quote  = document.getElementById('t-quote').value.trim();
+    const author = document.getElementById('t-author').value.trim();
+    if (!quote || !author) { showToast('Quote and author are required', 'danger'); return; }
+    const data = {
+      quote, author,
+      location: document.getElementById('t-location').value.trim(),
+      rating:   parseInt(document.getElementById('t-rating').value),
+      featured: document.getElementById('t-featured').checked,
+    };
+    if (editingTestimonialId) {
+      const idx = testimonials.findIndex(t => t.id === editingTestimonialId);
+      testimonials[idx] = { ...testimonials[idx], ...data };
+      showToast('Testimonial updated', 'success');
+    } else {
+      data.id = Date.now();
+      testimonials.push(data);
+      showToast('Testimonial added', 'success');
+    }
+    closeTestimonialModal();
+    renderTestimonials();
+    renderDashboard();
+  }
+
+  /* ─── DELETE CONFIRM ─── */
+  function confirmDelete(type, id) {
+    const names  = { listing: listings, agent: agents, testimonial: testimonials };
+    const store  = names[type];
+    const item   = store.find(x => x.id === id);
+    const label  = item.name || item.author || 'this item';
+    document.getElementById('confirmTitle').textContent = `Delete ${type}?`;
+    document.getElementById('confirmBody').textContent  = `Are you sure you want to delete "${label}"? This cannot be undone.`;
+    confirmCallback = async () => {
+      const idx = store.findIndex(x => x.id === id);
+      store.splice(idx, 1);
+      if (type === 'listing') { saveListingsToStorage(); await deleteListingCloud(id); }
+      closeConfirm();
+      if (type === 'listing')     { renderListings(); document.getElementById('listingsBadge').textContent = listings.length; }
+      if (type === 'agent')       renderAgents();
+      if (type === 'testimonial') renderTestimonials();
+      renderDashboard();
+      showToast(`"${label}" deleted`, 'danger');
+    };
+    document.getElementById('confirmOkBtn').onclick = confirmCallback;
+    document.getElementById('confirmOverlay').classList.add('open');
+  }
+
+  function closeConfirm() {
+    document.getElementById('confirmOverlay').classList.remove('open');
+    confirmCallback = null;
+  }
+
+  /* ─── TOAST ─── */
+  function showToast(msg, type) {
+    const icons = { success: '✓', danger: '✕', '': '✦' };
+    const el = document.createElement('div');
+    el.className = 'toast ' + (type || '');
+    el.innerHTML = `<span>${icons[type||'']||'✦'}</span> ${msg}`;
+    document.getElementById('toastContainer').appendChild(el);
+    setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity .3s'; setTimeout(() => el.remove(), 300); }, 3000);
+  }
+
+  /* ─── OVERLAY CLOSE ON BACKDROP ─── */
+  document.querySelectorAll('.overlay').forEach(ov => {
+    ov.addEventListener('click', e => {
+      if (e.target === ov) {
+        ov.classList.remove('open');
+        editingListingId = editingAgentId = editingTestimonialId = null;
+      }
+    });
+  });
+
+  /* ─── BOOT ─── */
+  if (isAuthenticated()) {
+    document.getElementById('loginScreen').classList.add('hidden');
+    initApp();
+  } else {
+    document.getElementById('loginPassword').focus();
+  }
+</script>
+  <script>
+
+    // ━━━ PAGE TRANSITIONS ━━━
+    (function() {
+      var overlay = document.getElementById('page-transition');
+      // Enter animation on load
+      overlay.classList.add('enter');
+      setTimeout(function() { overlay.classList.remove('enter'); }, 10);
+
+      // Leave animation on internal link click
+      document.querySelectorAll('a[href]').forEach(function(link) {
+        var href = link.getAttribute('href');
+        if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto') || href.startsWith('tel')) return;
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          var dest = this.getAttribute('href');
+          overlay.classList.add('leave');
+          setTimeout(function() { window.location.href = dest; }, 460);
+        });
+      });
+    })();
+
+    // ━━━ HAMBURGER MENU ━━━
+    (function() {
+      var burger = document.getElementById('navHamburger');
+      var overlay = document.getElementById('mobileOverlay');
+      var closeBtn = document.getElementById('mobileClose');
+      if (!burger || !overlay) return;
+
+      function openMenu() {
+        overlay.style.display = 'flex';
+        requestAnimationFrame(function() { overlay.classList.add('visible'); });
+        burger.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeMenu() {
+        overlay.classList.remove('visible');
+        burger.classList.remove('open');
+        document.body.style.overflow = '';
+        setTimeout(function() {
+          if (!overlay.classList.contains('visible')) overlay.style.display = 'none';
+        }, 420);
+      }
+      burger.addEventListener('click', function() {
+        if (overlay.classList.contains('visible')) closeMenu(); else openMenu();
+      });
+      if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+      // Close on link click
+      overlay.querySelectorAll('a').forEach(function(a) {
+        a.addEventListener('click', function() { closeMenu(); });
+      });
+    })();
+
+    // ━━━ COOKIE CONSENT ━━━
+    (function() {
+      var banner = document.getElementById('cookie-banner');
+      var modal  = document.getElementById('cookie-modal');
+      var COOKIE_KEY = 'maison_cookie_consent';
+
+      function getConsent() {
+        try { return JSON.parse(localStorage.getItem(COOKIE_KEY)); } catch(e) { return null; }
+      }
+      function saveConsent(val) {
+        try { localStorage.setItem(COOKIE_KEY, JSON.stringify(val)); } catch(e) {}
+      }
+      function hideBanner() {
+        banner.classList.remove('visible');
+        setTimeout(function() { banner.style.display = 'none'; }, 600);
+      }
+      function showModal() {
+        modal.style.display = 'flex';
+        requestAnimationFrame(function() { modal.classList.add('visible'); });
+        var consent = getConsent() || {};
+        var aT = document.getElementById('analyticsToggle');
+        var mT = document.getElementById('marketingToggle');
+        if (aT) aT.checked = !!consent.analytics;
+        if (mT) mT.checked = !!consent.marketing;
+      }
+      function hideModal() {
+        modal.classList.remove('visible');
+        setTimeout(function() { if (!modal.classList.contains('visible')) modal.style.display = 'none'; }, 350);
+      }
+
+      // Show banner after delay if no consent saved
+      if (!getConsent()) {
+        setTimeout(function() {
+          banner.style.display = 'flex';
+          requestAnimationFrame(function() { banner.classList.add('visible'); });
+        }, 1800);
+      }
+
+      var accept = document.getElementById('cookieAccept');
+      var decline = document.getElementById('cookieDecline');
+      var acceptAll = document.getElementById('cookieAcceptAll');
+      var savePrefs = document.getElementById('cookieSavePrefs');
+      var closeModal = document.getElementById('cookieModalClose');
+
+      if (accept) accept.addEventListener('click', function() {
+        saveConsent({ essential: true, analytics: true, marketing: true });
+        hideBanner();
+      });
+      if (decline) decline.addEventListener('click', function() {
+        saveConsent({ essential: true, analytics: false, marketing: false });
+        hideBanner();
+      });
+      if (acceptAll) acceptAll.addEventListener('click', function() {
+        saveConsent({ essential: true, analytics: true, marketing: true });
+        hideModal(); hideBanner();
+      });
+      if (savePrefs) savePrefs.addEventListener('click', function() {
+        var aT = document.getElementById('analyticsToggle');
+        var mT = document.getElementById('marketingToggle');
+        saveConsent({ essential: true, analytics: aT ? aT.checked : false, marketing: mT ? mT.checked : false });
+        hideModal(); hideBanner();
+      });
+      if (closeModal) closeModal.addEventListener('click', hideModal);
+
+      // Open modal from footer link & banner settings link
+      document.querySelectorAll('.cookie-settings-trigger, [href*="Cookie"]').forEach(function(el) {
+        el.addEventListener('click', function(e) {
+          // Only intercept non-page-nav links
+          if (el.tagName === 'A' && el.classList.contains('footer-bottom-link')) {
+            e.preventDefault();
+            showModal();
+          }
+        });
+      });
+      document.querySelectorAll('.cookie-settings-trigger').forEach(function(el) {
+        el.addEventListener('click', function(e) { e.preventDefault(); showModal(); });
+      });
+      // Close modal on overlay click
+      if (modal) modal.addEventListener('click', function(e) { if (e.target === modal) hideModal(); });
+    })();
+
+  </script>
+</body>
+</html>
